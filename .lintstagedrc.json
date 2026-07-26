@@ -1,0 +1,3 @@
+{
+    "backend/**/*.js": ["npm run --workspace backend lint --", "npm run --workspace backend format --"]
+}

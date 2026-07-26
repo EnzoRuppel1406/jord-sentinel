@@ -1,13 +1,21 @@
 {
-  "name": "jord-sentinel-backend",
-  "version": "1.0.0",
-  "description": "Backend da plataforma Jörð Sentinel.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module"
+    "name": "jord-sentinel-backend",
+    "version": "1.0.0",
+    "description": "Backend da plataforma Jörð Sentinel.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint",
+        "format": "prettier --write"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.8.0",
+        "globals": "^17.7.0",
+        "prettier": "^3.9.6"
+    }
 }
