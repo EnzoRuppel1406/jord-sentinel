@@ -1,9 +1,8 @@
-import 'dotenv/config'
 import pg from 'pg'
 
 const { Pool } = pg
 
-const pool = new Pool({
+export const pool = new Pool({
     database: process.env.POSTGRES_DB,
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
@@ -18,7 +17,7 @@ export const PostgresClient = {
             const result = await client.query(query, params)
             return result.rows
         } finally {
-            client.release()
+            await client.release()
         }
     },
 }

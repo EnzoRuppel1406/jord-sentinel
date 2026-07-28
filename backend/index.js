@@ -1,9 +1,13 @@
+import 'dotenv/config'
 import express from 'express'
+import { PostgresClient } from './src/database/postgres/client.js'
 
 const app = express()
 
-app.get('/', (req, res) => {
-    res.send('Hello world!')
+app.get('/', async (req, res) => {
+    const result = await PostgresClient.query('SELECT * FROM companies;')
+
+    res.json(result)
 })
 
-app.listen(8080, () => console.log('listening on port 8080'))
+app.listen(process.env.PORT, () => console.log('listening on port 8080'))
