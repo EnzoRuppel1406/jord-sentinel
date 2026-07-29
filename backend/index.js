@@ -3,6 +3,7 @@ import express from 'express'
 import { CreateCompanyController } from './src/controllers/createCompany.js'
 import { GetCompanyByIdController } from './src/controllers/getCompanyById.js'
 import { UpdateCompanyController } from './src/controllers/updateCompany.js'
+import { DeletecompanyController } from './src/controllers/deleteCompany.js'
 
 const app = express()
 app.use(express.json())
@@ -25,6 +26,13 @@ app.post('/api/companies', async (req, res) => {
 app.put('/api/companies/:companyId', async (req, res) => {
     const updateCompanyController = new UpdateCompanyController()
     const { statusCode, body } = await updateCompanyController.execute(req)
+
+    res.status(statusCode).send(body)
+})
+
+app.delete('/api/companies/:companyId', async (req, res) => {
+    const deleteCompanyController = new DeletecompanyController()
+    const { statusCode, body } = await deleteCompanyController.execute(req)
 
     res.status(statusCode).send(body)
 })
