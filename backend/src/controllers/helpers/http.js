@@ -6,3 +6,7 @@ export const serverError = () => ({
     statusCode: 500,
     body: { message: 'Internal Server Error' },
 })
+
+export const notFound = (body) => ({ statusCode: 404, body })
+
+export const ok = (body) => ({ statusCode: 200, body })

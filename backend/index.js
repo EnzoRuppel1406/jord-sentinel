@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from 'express'
-import { PostgresClient } from './src/database/postgres/client.js'
 import { CreateCompanyController } from './src/controllers/createCompany.js'
+import { GetCompanyByIdController } from './src/controllers/getCompanyById.js'
 
 const app = express()
 app.use(express.json())
@@ -13,10 +13,12 @@ app.post('/api/companies', async (req, res) => {
     res.status(statusCode).send(body)
 })
 
-app.get('/', async (req, res) => {
-    const result = await PostgresClient.query('SELECT * FROM companies;')
+app.get('/companies/:companyId', async (req, res) => {
+    const getCompanyByIdController = new GetCompanyByIdController()
 
-    res.json(result)
+    const { statusCode, body } = await getCompanyByIdController.execute(req)
+
+    res.status(statusCode).send(body)
 })
 
 app.listen(process.env.PORT, () => console.log(`listening on port ${process.env.PORT}`))
