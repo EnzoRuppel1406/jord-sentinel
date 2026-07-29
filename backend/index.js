@@ -2,9 +2,18 @@ import 'dotenv/config'
 import express from 'express'
 import { CreateCompanyController } from './src/controllers/createCompany.js'
 import { GetCompanyByIdController } from './src/controllers/getCompanyById.js'
+import { UpdateCompanyController } from './src/controllers/updateCompany.js'
 
 const app = express()
 app.use(express.json())
+
+app.get('/api/companies/:companyId', async (req, res) => {
+    const getCompanyByIdController = new GetCompanyByIdController()
+
+    const { statusCode, body } = await getCompanyByIdController.execute(req)
+
+    res.status(statusCode).send(body)
+})
 
 app.post('/api/companies', async (req, res) => {
     const createCompanyController = new CreateCompanyController()
@@ -13,10 +22,9 @@ app.post('/api/companies', async (req, res) => {
     res.status(statusCode).send(body)
 })
 
-app.get('/companies/:companyId', async (req, res) => {
-    const getCompanyByIdController = new GetCompanyByIdController()
-
-    const { statusCode, body } = await getCompanyByIdController.execute(req)
+app.put('/api/companies/:companyId', async (req, res) => {
+    const updateCompanyController = new UpdateCompanyController()
+    const { statusCode, body } = await updateCompanyController.execute(req)
 
     res.status(statusCode).send(body)
 })
