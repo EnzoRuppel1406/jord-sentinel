@@ -1,6 +1,10 @@
-import { DeleteCompanyUseCase } from '../use-cases/deleteCompany.js'
-import { ok, serverError } from './helpers/http.js'
-import { checkIfIdIsValid, companyNotFoundResponse, invalidResponse } from './helpers/user.js'
+import { DeleteCompanyUseCase } from '../use-cases/index.js'
+import { ok, serverError } from '../../shared/helpers/http.js'
+import {
+    checkIfIdIsValid,
+    companyNotFoundResponse,
+    invalidResponse,
+} from '../../shared/helpers/user.js'
 
 export class DeletecompanyController {
     async execute(httpRequest) {

@@ -1,6 +1,10 @@
-import { UpdateCompanyUseCase } from '../use-cases/updateCompany.js'
-import { badRequest, ok, serverError } from './helpers/http.js'
-import { checkIfIdIsValid, invalidResponse } from './helpers/user.js'
+import { UpdateCompanyUseCase } from '../use-cases/index.js'
+import { badRequest, ok, serverError } from '../../shared/helpers/http.js'
+import {
+    checkIfIdIsValid,
+    companyNotFoundResponse,
+    invalidResponse,
+} from '../../shared/helpers/user.js'
 
 export class UpdateCompanyController {
     async execute(httpRequest) {
@@ -38,6 +42,10 @@ export class UpdateCompanyController {
             const updateCompanyUseCase = new UpdateCompanyUseCase()
 
             const updatedCompany = await updateCompanyUseCase.execute(companyId, params)
+
+            if (!updatedCompany) {
+                return companyNotFoundResponse()
+            }
 
             return ok(updatedCompany)
         } catch (error) {

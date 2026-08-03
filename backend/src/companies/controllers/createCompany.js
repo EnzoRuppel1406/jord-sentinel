@@ -1,5 +1,5 @@
-import { CreateCompanyUseCase } from '../use-cases/createCompany.js'
-import { badRequest, created, serverError } from './helpers/http.js'
+import { CreateCompanyUseCase } from '../use-cases/index.js'
+import { badRequest, created, serverError } from '../../shared/helpers/http.js'
 
 export class CreateCompanyController {
     async execute(httpRequest) {

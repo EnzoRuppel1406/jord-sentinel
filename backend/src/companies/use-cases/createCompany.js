@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { PostgresCreateCompanyRepository } from '../repositories/postgres/createCompany.js'
+import { PostgresCompanyRepository } from '../repositories/postgres/company.js'
 
 export class CreateCompanyUseCase {
     async execute(createCompanyParams) {
@@ -10,9 +10,9 @@ export class CreateCompanyUseCase {
             id: companyId,
         }
 
-        const postgresCreateCompanyRepository = new PostgresCreateCompanyRepository()
+        const postgresCompanyRepository = new PostgresCompanyRepository()
 
-        const createdCompany = await postgresCreateCompanyRepository.execute(company)
+        const createdCompany = await postgresCompanyRepository.createCompany(company)
 
         return createdCompany
     }

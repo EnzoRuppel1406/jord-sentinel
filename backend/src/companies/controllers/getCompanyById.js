@@ -1,6 +1,10 @@
-import { GetCompanyByIdUseCase } from '../use-cases/getCompanyById.js'
-import { checkIfIdIsValid, companyNotFoundResponse, invalidResponse } from './helpers/user.js'
-import { ok, serverError } from './helpers/http.js'
+import { GetCompanyByIdUseCase } from '../use-cases/index.js'
+import {
+    checkIfIdIsValid,
+    companyNotFoundResponse,
+    invalidResponse,
+} from '../../shared/helpers/user.js'
+import { ok, serverError } from '../../shared/helpers/http.js'
 
 export class GetCompanyByIdController {
     async execute(httpRequest) {
