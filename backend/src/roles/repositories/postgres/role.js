@@ -19,4 +19,27 @@ export class PostgresRoleRepository {
 
         return role[0]
     }
+
+    async updateRole(roleId, updateRoleParams) {
+        const updateFields = []
+        const updateValues = []
+
+        Object.keys(updateRoleParams).forEach((key) => {
+            updateFields.push(`${key} = $${updateValues.length + 1}`)
+            updateValues.push(updateRoleParams[key])
+        })
+
+        updateValues.push(roleId)
+
+        const updateQuery = `
+            UPDATE roles
+            SET ${updateFields.join(',')}
+            WHERE id = $${updateValues.length}
+            RETURNING *
+        `
+
+        const updatedRole = await PostgresClient.query(updateQuery, updateValues)
+
+        return updatedRole[0]
+    }
 }

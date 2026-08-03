@@ -1,9 +1,11 @@
 import { UpdateCompanyUseCase } from '../use-cases/index.js'
-import { badRequest, ok, serverError } from '../../shared/helpers/http.js'
+import { ok, serverError } from '../../shared/helpers/http.js'
 import {
     checkIfIdIsValid,
     companyNotFoundResponse,
     invalidResponse,
+    someFieldIsBlankResponse,
+    someFieldIsNotAllowedResponse,
 } from '../../shared/helpers/user.js'
 
 export class UpdateCompanyController {
@@ -26,9 +28,7 @@ export class UpdateCompanyController {
             )
 
             if (someFieldIsNotAllowed) {
-                return badRequest({
-                    message: 'Some provided field is not allowed.',
-                })
+                return someFieldIsNotAllowedResponse()
             }
 
             const someFieldIsBlank = Object.keys(params).some(
@@ -36,7 +36,7 @@ export class UpdateCompanyController {
             )
 
             if (someFieldIsBlank) {
-                return badRequest({ message: 'Some provided field is blank.' })
+                return someFieldIsBlankResponse()
             }
 
             const updateCompanyUseCase = new UpdateCompanyUseCase()
