@@ -1,5 +1,5 @@
 import { badRequest, ok, serverError } from '../../shared/helpers/http.js'
-import { CreateRoleUseCase } from '../use-cases/createRole.js'
+import { CreateRoleUseCase } from '../use-cases/index.js'
 
 export class CreateRoleController {
     async execute(httpRequest) {

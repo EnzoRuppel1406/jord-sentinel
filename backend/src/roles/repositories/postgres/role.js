@@ -7,10 +7,16 @@ export class PostgresRoleRepository {
             [createRoleParams.id, createRoleParams.name, createRoleParams.description]
         )
 
-        const createdRole = await PostgresClient.query('SElECT * FROM roles WHERE id = $1', [
+        const createdRole = await PostgresClient.query('SELECT * FROM roles WHERE id = $1', [
             createRoleParams.id,
         ])
 
         return createdRole[0]
+    }
+
+    async getRoleById(roleId) {
+        const role = await PostgresClient.query('SELECT * FROM roles WHERE id = $1', [roleId])
+
+        return role[0]
     }
 }
