@@ -1,6 +1,10 @@
 import express from 'express'
-import { CreateRoleController, GetRoleByIdController } from '../controllers/index.js'
-import { UpdateRoleController } from '../controllers/updateRole.js'
+import {
+    CreateRoleController,
+    DeleteRoleController,
+    GetRoleByIdController,
+    UpdateRoleController,
+} from '../controllers/index.js'
 
 export const router = express.Router()
 
@@ -25,6 +29,13 @@ router
         const updateRoleController = new UpdateRoleController()
 
         const { statusCode, body } = await updateRoleController.execute(req)
+
+        res.status(statusCode).send(body)
+    })
+    .delete(async (req, res) => {
+        const deleteRoleController = new DeleteRoleController()
+
+        const { statusCode, body } = await deleteRoleController.execute(req)
 
         res.status(statusCode).send(body)
     })

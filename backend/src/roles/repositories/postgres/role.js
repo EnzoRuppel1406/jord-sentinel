@@ -42,4 +42,17 @@ export class PostgresRoleRepository {
 
         return updatedRole[0]
     }
+
+    async deleteRole(roleId) {
+        const deletedRole = await PostgresClient.query(
+            `
+                DELETE FROM roles
+                WHERE id = $1
+                RETURNING *
+            `,
+            [roleId]
+        )
+
+        return deletedRole[0]
+    }
 }
