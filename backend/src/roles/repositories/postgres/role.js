@@ -1,7 +1,7 @@
 import { PostgresClient } from '../../../database/postgres/client.js'
 
 export class PostgresRoleRepository {
-    async createRole(createRoleParams) {
+    async create(createRoleParams) {
         await PostgresClient.query(
             'INSERT INTO roles (id, name, description) VALUES ($1, $2, $3)',
             [createRoleParams.id, createRoleParams.name, createRoleParams.description]
@@ -14,13 +14,13 @@ export class PostgresRoleRepository {
         return createdRole[0]
     }
 
-    async getRoleById(roleId) {
+    async getById(roleId) {
         const role = await PostgresClient.query('SELECT * FROM roles WHERE id = $1', [roleId])
 
         return role[0]
     }
 
-    async updateRole(roleId, updateRoleParams) {
+    async update(roleId, updateRoleParams) {
         const updateFields = []
         const updateValues = []
 
@@ -43,7 +43,7 @@ export class PostgresRoleRepository {
         return updatedRole[0]
     }
 
-    async deleteRole(roleId) {
+    async delete(roleId) {
         const deletedRole = await PostgresClient.query(
             `
                 DELETE FROM roles
@@ -54,5 +54,15 @@ export class PostgresRoleRepository {
         )
 
         return deletedRole[0]
+    }
+
+    async list() {
+        return await PostgresClient.query('SELECT * FROM roles')
+    }
+
+    async getByName(roleName) {
+        const role = await PostgresClient.query('SELECT * FROM roles WHERE name = $1', [roleName])
+
+        return role[0]
     }
 }

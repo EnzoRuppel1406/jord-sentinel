@@ -4,7 +4,7 @@ export class GetCompanyByIdUseCase {
     async execute(companyId) {
         const postgresCompanyRepository = new PostgresCompanyRepository()
 
-        const company = await postgresCompanyRepository.getCompanyById(companyId)
+        const company = await postgresCompanyRepository.getById(companyId)
 
         return company
     }

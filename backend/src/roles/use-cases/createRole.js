@@ -9,7 +9,7 @@ export class CreateRoleUseCase {
 
         const postgresRoleRepository = new PostgresRoleRepository()
 
-        const createdRole = await postgresRoleRepository.createRole(role)
+        const createdRole = await postgresRoleRepository.create(role)
 
         return createdRole
     }

@@ -3,18 +3,29 @@ import {
     CreateRoleController,
     DeleteRoleController,
     GetRoleByIdController,
+    GetRoleByNameController,
+    ListRolesController,
     UpdateRoleController,
 } from '../controllers/index.js'
 
 export const router = express.Router()
 
-router.post('/', async (req, res) => {
-    const createRoleController = new CreateRoleController()
+router
+    .route('/')
+    .post(async (req, res) => {
+        const createRoleController = new CreateRoleController()
 
-    const { statusCode, body } = await createRoleController.execute(req)
+        const { statusCode, body } = await createRoleController.execute(req)
 
-    res.status(statusCode).send(body)
-})
+        res.status(statusCode).send(body)
+    })
+    .get(async (req, res) => {
+        const listRolesController = new ListRolesController()
+
+        const { statusCode, body } = await listRolesController.execute()
+
+        res.status(statusCode).send(body)
+    })
 
 router
     .route('/:roleId')
@@ -39,3 +50,11 @@ router
 
         res.status(statusCode).send(body)
     })
+
+router.get('/name/:roleName', async (req, res) => {
+    const getRoleByNameController = new GetRoleByNameController()
+
+    const { statusCode, body } = await getRoleByNameController.execute(req)
+
+    res.status(statusCode).send(body)
+})

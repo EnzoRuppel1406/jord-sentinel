@@ -1,7 +1,7 @@
 import { PostgresClient } from '../../../database/postgres/client.js'
 
 export class PostgresCompanyRepository {
-    async createCompany(createCompanyParams) {
+    async create(createCompanyParams) {
         await PostgresClient.query('INSERT INTO companies (id, name) VALUES ($1, $2)', [
             createCompanyParams.id,
             createCompanyParams.name,
@@ -14,7 +14,7 @@ export class PostgresCompanyRepository {
         return createdCompany[0]
     }
 
-    async getCompanyById(companyId) {
+    async getById(companyId) {
         const company = await PostgresClient.query('SELECT * FROM companies WHERE id = $1', [
             companyId,
         ])
@@ -22,7 +22,7 @@ export class PostgresCompanyRepository {
         return company[0]
     }
 
-    async updateCompany(companyId, updateCompanyParams) {
+    async update(companyId, updateCompanyParams) {
         const updateFields = []
         const updateValues = []
 
@@ -46,7 +46,7 @@ export class PostgresCompanyRepository {
         return updatedCompany[0]
     }
 
-    async deleteCompany(companyId) {
+    async delete(companyId) {
         const deletedCompany = await PostgresClient.query(
             `
                 DELETE FROM companies
@@ -57,5 +57,17 @@ export class PostgresCompanyRepository {
         )
 
         return deletedCompany[0]
+    }
+
+    async list() {
+        return await PostgresClient.query('SELECT * FROM companies WHERE deleted_at IS NULL')
+    }
+
+    async getByName(companyName) {
+        const company = await PostgresClient.query('SELECT * FROM companies WHERE name = $1', [
+            companyName,
+        ])
+
+        return company[0]
     }
 }

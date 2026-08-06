@@ -4,7 +4,7 @@ export class DeleteRoleUseCase {
     async execute(roleId) {
         const postgesRoleRepository = new PostgresRoleRepository()
 
-        const deletedRole = await postgesRoleRepository.deleteRole(roleId)
+        const deletedRole = await postgesRoleRepository.delete(roleId)
 
         return deletedRole
     }

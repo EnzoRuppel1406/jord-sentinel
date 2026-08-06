@@ -4,7 +4,7 @@ export class DeleteCompanyUseCase {
     async execute(companyId) {
         const postgresCompanyRepository = new PostgresCompanyRepository()
 
-        const deletedCompany = await postgresCompanyRepository.deleteCompany(companyId)
+        const deletedCompany = await postgresCompanyRepository.delete(companyId)
 
         return deletedCompany
     }

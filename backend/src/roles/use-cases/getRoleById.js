@@ -4,7 +4,7 @@ export class GetRoleByIdUseCase {
     async execute(roleId) {
         const postgresRoleRepository = new PostgresRoleRepository()
 
-        const role = await postgresRoleRepository.getRoleById(roleId)
+        const role = await postgresRoleRepository.getById(roleId)
 
         return role
     }

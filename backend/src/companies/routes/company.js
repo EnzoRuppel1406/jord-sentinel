@@ -4,6 +4,8 @@ import {
     CreateCompanyController,
     UpdateCompanyController,
     DeletecompanyController,
+    ListCompaniesController,
+    GetCompanyByNameController,
 } from '../controllers/index.js'
 
 export const router = express.Router()
@@ -30,9 +32,26 @@ router
         res.status(statusCode).send(body)
     })
 
-router.post('/', async (req, res) => {
-    const createCompanyController = new CreateCompanyController()
-    const { statusCode, body } = await createCompanyController.execute(req)
+router
+    .route('/')
+    .post(async (req, res) => {
+        const createCompanyController = new CreateCompanyController()
+        const { statusCode, body } = await createCompanyController.execute(req)
+
+        res.status(statusCode).send(body)
+    })
+    .get(async (req, res) => {
+        const listCompaniesController = new ListCompaniesController()
+
+        const { statusCode, body } = await listCompaniesController.execute()
+
+        res.status(statusCode).send(body)
+    })
+
+router.get('/name/:companyName', async (req, res) => {
+    const getCompanyByNameController = new GetCompanyByNameController()
+
+    const { statusCode, body } = await getCompanyByNameController.execute(req)
 
     res.status(statusCode).send(body)
 })

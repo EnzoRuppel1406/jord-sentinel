@@ -6,7 +6,7 @@ export class UpdateCompanyUseCase {
 
         const postgresCompanyRepository = new PostgresCompanyRepository()
 
-        const updatedCompany = await postgresCompanyRepository.updateCompany(companyId, company)
+        const updatedCompany = await postgresCompanyRepository.update(companyId, company)
 
         return updatedCompany
     }

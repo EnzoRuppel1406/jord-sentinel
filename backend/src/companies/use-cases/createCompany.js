@@ -12,7 +12,7 @@ export class CreateCompanyUseCase {
 
         const postgresCompanyRepository = new PostgresCompanyRepository()
 
-        const createdCompany = await postgresCompanyRepository.createCompany(company)
+        const createdCompany = await postgresCompanyRepository.create(company)
 
         return createdCompany
     }
