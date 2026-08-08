@@ -5,6 +5,7 @@ import {
     GetUserByEmailController,
     GetUserByIdController,
     UpdateUserController,
+    AuthenticateUserController,
 } from '../controllers/index.js'
 
 export const router = express.Router()
@@ -45,6 +46,14 @@ router.get('/email/:userEmail', async (req, res) => {
     const getUserByEmailController = new GetUserByEmailController()
 
     const { statusCode, body } = await getUserByEmailController.execute(req)
+
+    res.status(statusCode).send(body)
+})
+
+router.post('/login', async (req, res) => {
+    const authenticateUserController = new AuthenticateUserController()
+
+    const { statusCode, body } = await authenticateUserController.execute(req)
 
     res.status(statusCode).send(body)
 })
