@@ -4,11 +4,10 @@ import bcrypt from 'bcrypt'
 import { PostgresUserRepository } from '../repositories/user.js'
 import { PostgresCompanyRepository } from '../../companies/repositories/postgres/company.js'
 import { PostgresRoleRepository } from '../../roles/repositories/postgres/role.js'
+import { EmailAlreadyInUseError } from '../../shared/errors/user.js'
 
 export class CreateUserUseCase {
     async execute(createUserParams) {
-        const userId = uuidv4()
-
         const postgresCompanyRepository = new PostgresCompanyRepository()
 
         const company = await postgresCompanyRepository.getByName(createUserParams.company)
@@ -29,6 +28,18 @@ export class CreateUserUseCase {
 
         const roleId = role.id
 
+        const postgresUserRepository = new PostgresUserRepository()
+
+        const userWithProvidedEmail = await postgresUserRepository.getByEmail(
+            createUserParams.email
+        )
+
+        if (userWithProvidedEmail) {
+            throw new EmailAlreadyInUseError(createUserParams.email)
+        }
+
+        const userId = uuidv4()
+
         const hashedPassword = await bcrypt.hash(createUserParams.password, 10)
 
         const user = {
@@ -38,8 +49,6 @@ export class CreateUserUseCase {
             role: roleId,
             password: hashedPassword,
         }
-
-        const postgresUserRepository = new PostgresUserRepository()
 
         const createdUser = await postgresUserRepository.create(user)
 

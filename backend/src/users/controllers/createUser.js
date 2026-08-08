@@ -1,3 +1,4 @@
+import { EmailAlreadyInUseError } from '../../shared/errors/user.js'
 import {
     ok,
     badRequest,
@@ -40,6 +41,9 @@ export class CreateUserController {
 
             return ok(createdUser)
         } catch (error) {
+            if (error instanceof EmailAlreadyInUseError) {
+                return badRequest({ message: error.message })
+            }
             console.log(error)
             return serverError()
         }

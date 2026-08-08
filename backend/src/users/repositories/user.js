@@ -36,4 +36,10 @@ export class PostgresUserRepository {
 
         return user[0]
     }
+
+    async getByEmail(email) {
+        const user = await PostgresClient.query('SELECT * FROM users WHERE email = $1', [email])
+
+        return user[0]
+    }
 }
