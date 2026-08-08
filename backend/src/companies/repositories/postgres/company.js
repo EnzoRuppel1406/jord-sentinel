@@ -49,7 +49,8 @@ export class PostgresCompanyRepository {
     async delete(companyId) {
         const deletedCompany = await PostgresClient.query(
             `
-                DELETE FROM companies
+                UPDATE companies
+                SET active = FALSE, updated_at = NOW(), deleted_at = NOW()
                 WHERE id = $1
                 RETURNING *
             `,

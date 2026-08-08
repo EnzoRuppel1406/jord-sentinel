@@ -7,7 +7,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint",
         "format": "prettier --write",
-        "start:dev": "node --watch index.js"
+        "start:dev": "node --watch index.js",
+        "migrate": "node ./src/database/postgres/migrations/migrate.js"
     },
     "keywords": [],
     "author": "",

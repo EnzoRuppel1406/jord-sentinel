@@ -46,7 +46,8 @@ export class PostgresRoleRepository {
     async delete(roleId) {
         const deletedRole = await PostgresClient.query(
             `
-                DELETE FROM roles
+                UPDATE roles
+                SET active = FALSE, updated_at = NOW(), deleted_at = NOW()
                 WHERE id = $1
                 RETURNING *
             `,
@@ -57,7 +58,7 @@ export class PostgresRoleRepository {
     }
 
     async list() {
-        return await PostgresClient.query('SELECT * FROM roles')
+        return await PostgresClient.query('SELECT * FROM roles WHERE deleted_at IS NULL')
     }
 
     async getByName(roleName) {
