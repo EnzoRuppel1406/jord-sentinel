@@ -1,6 +1,7 @@
 import express from 'express'
 import {
     CreateUserController,
+    DeleteUserController,
     GetUserByEmailController,
     GetUserByIdController,
     UpdateUserController,
@@ -29,6 +30,13 @@ router
         const updateUserController = new UpdateUserController()
 
         const { statusCode, body } = await updateUserController.execute(req)
+
+        res.status(statusCode).send(body)
+    })
+    .delete(async (req, res) => {
+        const deleteUserController = new DeleteUserController()
+
+        const { statusCode, body } = await deleteUserController.execute(req)
 
         res.status(statusCode).send(body)
     })

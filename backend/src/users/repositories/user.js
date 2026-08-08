@@ -66,4 +66,18 @@ export class PostgresUserRepository {
 
         return updatedUser[0]
     }
+
+    async delete(userId) {
+        const deletedUser = await PostgresClient.query(
+            `
+            UPDATE users
+            SET active = false, updated_at = NOW(), deleted_at = NOW()
+            WHERE id = $1
+            RETURNING *
+            `,
+            [userId]
+        )
+
+        return deletedUser[0]
+    }
 }
