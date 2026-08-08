@@ -1,7 +1,7 @@
 import { PostgresClient } from '../../database/postgres/client.js'
 
 export class PostgresUserRepository {
-    async createUser(createUserParams) {
+    async create(createUserParams) {
         await PostgresClient.query(
             `
                 INSERT INTO users (id, company_id, role_id, name, email, password)
@@ -29,5 +29,11 @@ export class PostgresUserRepository {
         ])
 
         return createdUser[0]
+    }
+
+    async getById(userId) {
+        const user = await PostgresClient.query('SELECT * FROM users WHERE id = $1', [userId])
+
+        return user[0]
     }
 }

@@ -1,4 +1,4 @@
-import { badRequest, ok, serverError } from '../../shared/helpers/http.js'
+import { badRequest, ok, serverError } from '../../shared/helpers/index.js'
 import { CreateRoleUseCase } from '../use-cases/index.js'
 
 export class CreateRoleController {

@@ -3,8 +3,9 @@ import {
     checkIfIdIsValid,
     companyNotFoundResponse,
     invalidResponse,
-} from '../../shared/helpers/user.js'
-import { ok, serverError } from '../../shared/helpers/http.js'
+    ok,
+    serverError,
+} from '../../shared/helpers/index.js'
 
 export class GetCompanyByIdController {
     async execute(httpRequest) {

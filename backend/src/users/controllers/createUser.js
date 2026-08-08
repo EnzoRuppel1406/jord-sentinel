@@ -1,4 +1,12 @@
-import { ok, badRequest, serverError } from '../../shared/helpers/http.js'
+import {
+    ok,
+    badRequest,
+    serverError,
+    checkIfEmailIsValid,
+    checkIfPasswordIsValid,
+    invalidEmailResponse,
+    invalidPasswordResponse,
+} from '../../shared/helpers/index.js'
 import { CreateUserUseCase } from '../use-cases/index.js'
 
 export class CreateUserController {
@@ -12,6 +20,18 @@ export class CreateUserController {
                 if (!params[field] || params[field].trim().length === 0) {
                     return badRequest({ message: `Missing param ${field}` })
                 }
+            }
+
+            const emailIsValid = checkIfEmailIsValid(params.email)
+
+            if (!emailIsValid) {
+                return invalidEmailResponse()
+            }
+
+            const passwordIsValid = checkIfPasswordIsValid(params.password)
+
+            if (!passwordIsValid) {
+                return invalidPasswordResponse()
             }
 
             const createUserUseCase = new CreateUserUseCase()

@@ -1,4 +1,4 @@
-import { ok, serverError } from '../../shared/helpers/http.js'
+import { ok, serverError } from '../../shared/helpers/index.js'
 import { ListCompaniesUseCase } from '../use-cases/listCompanies.js'
 
 export class ListCompaniesController {

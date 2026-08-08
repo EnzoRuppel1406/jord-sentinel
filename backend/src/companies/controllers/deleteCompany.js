@@ -1,5 +1,5 @@
 import { DeleteCompanyUseCase } from '../use-cases/index.js'
-import { ok, serverError } from '../../shared/helpers/http.js'
+import { ok, serverError } from '../../shared/helpers/index.js'
 import {
     checkIfIdIsValid,
     companyNotFoundResponse,

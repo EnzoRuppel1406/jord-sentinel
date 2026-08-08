@@ -1,12 +1,13 @@
 import { UpdateRoleUseCase } from '../use-cases/index.js'
 import {
+    ok,
+    serverError,
     checkIfIdIsValid,
     invalidResponse,
     roleNotFoundResponse,
     someFieldIsBlankResponse,
     someFieldIsNotAllowedResponse,
-} from '../../shared/helpers/user.js'
-import { ok, serverError } from '../../shared/helpers/http.js'
+} from '../../shared/helpers/index.js'
 
 export class UpdateRoleController {
     async execute(httpRequest) {

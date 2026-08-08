@@ -1,5 +1,4 @@
-import { badRequest, ok, serverError } from '../../shared/helpers/http.js'
-import { companyNotFoundResponse } from '../../shared/helpers/user.js'
+import { badRequest, ok, serverError, companyNotFoundResponse } from '../../shared/helpers/index.js'
 import { GetCompanyByNameUseCase } from '../use-cases/index.js'
 
 export class GetCompanyByNameController {

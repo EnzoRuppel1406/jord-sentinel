@@ -1,6 +1,5 @@
 import { GetRoleByNameUseCase } from '../use-cases/index.js'
-import { badRequest, ok, serverError } from '../../shared/helpers/http.js'
-import { roleNotFoundResponse } from '../../shared/helpers/user.js'
+import { badRequest, ok, serverError, roleNotFoundResponse } from '../../shared/helpers/index.js'
 
 export class GetRoleByNameController {
     async execute(httpRequest) {

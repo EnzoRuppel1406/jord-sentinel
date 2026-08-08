@@ -1,12 +1,13 @@
 import { UpdateCompanyUseCase } from '../use-cases/index.js'
-import { ok, serverError } from '../../shared/helpers/http.js'
 import {
     checkIfIdIsValid,
     companyNotFoundResponse,
     invalidResponse,
     someFieldIsBlankResponse,
     someFieldIsNotAllowedResponse,
-} from '../../shared/helpers/user.js'
+    ok,
+    serverError,
+} from '../../shared/helpers/index.js'
 
 export class UpdateCompanyController {
     async execute(httpRequest) {

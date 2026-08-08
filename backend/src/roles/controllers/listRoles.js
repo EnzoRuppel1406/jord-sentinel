@@ -1,5 +1,5 @@
 import { ListRolesUseCase } from '../use-cases/index.js'
-import { ok, serverError } from '../../shared/helpers/http.js'
+import { ok, serverError } from '../../shared/helpers/index.js'
 
 export class ListRolesController {
     async execute() {

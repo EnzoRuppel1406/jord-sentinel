@@ -1,9 +1,10 @@
-import { ok, serverError } from '../../shared/helpers/http.js'
 import {
+    ok,
+    serverError,
     checkIfIdIsValid,
     invalidResponse,
     roleNotFoundResponse,
-} from '../../shared/helpers/user.js'
+} from '../../shared/helpers/index.js'
 import { DeleteRoleUseCase } from '../use-cases/index.js'
 
 export class DeleteRoleController {
