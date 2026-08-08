@@ -3,6 +3,7 @@ import {
     CreateUserController,
     GetUserByEmailController,
     GetUserByIdController,
+    UpdateUserController,
 } from '../controllers/index.js'
 
 export const router = express.Router()
@@ -15,13 +16,22 @@ router.post('/', async (req, res) => {
     res.status(statusCode).send(body)
 })
 
-router.get('/:userId', async (req, res) => {
-    const getUserByIdController = new GetUserByIdController()
+router
+    .route('/:userId')
+    .get(async (req, res) => {
+        const getUserByIdController = new GetUserByIdController()
 
-    const { statusCode, body } = await getUserByIdController.execute(req)
+        const { statusCode, body } = await getUserByIdController.execute(req)
 
-    res.status(statusCode).send(body)
-})
+        res.status(statusCode).send(body)
+    })
+    .put(async (req, res) => {
+        const updateUserController = new UpdateUserController()
+
+        const { statusCode, body } = await updateUserController.execute(req)
+
+        res.status(statusCode).send(body)
+    })
 
 router.get('/email/:userEmail', async (req, res) => {
     const getUserByEmailController = new GetUserByEmailController()

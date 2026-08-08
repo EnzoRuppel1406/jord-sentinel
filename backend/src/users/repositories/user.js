@@ -42,4 +42,28 @@ export class PostgresUserRepository {
 
         return user[0]
     }
+
+    async update(userId, updateUserParams) {
+        const updateFields = []
+        const updateValues = []
+
+        Object.keys(updateUserParams).forEach((key) => {
+            updateFields.push(`${key} = $${updateValues.length + 1}`)
+            updateValues.push(updateUserParams[key])
+        })
+
+        updateFields.push('updated_at = NOW()')
+        updateValues.push(userId)
+
+        const updateQuery = `
+            UPDATE users
+            SET ${updateFields.join(',')}
+            WHERE id = $${updateFields.length}
+            RETURNING *
+        `
+
+        const updatedUser = await PostgresClient.query(updateQuery, updateValues)
+
+        return updatedUser[0]
+    }
 }
