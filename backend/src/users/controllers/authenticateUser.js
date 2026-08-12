@@ -1,4 +1,4 @@
-import { badRequest, ok, serverError } from '../../shared/helpers/index.js'
+import { badRequest, ok, serverError, unauthorized } from '../../shared/helpers/index.js'
 import { AuthenticateUserUseCase } from '../use-cases/index.js'
 
 export class AuthenticateUserController {
@@ -15,7 +15,7 @@ export class AuthenticateUserController {
             const user = await authenticateUserUseCase.execute(email, password)
 
             if (!user) {
-                return badRequest({ message: 'Invalid email or password' })
+                return unauthorized({ message: 'Invalid email or password' })
             }
 
             return ok(user)

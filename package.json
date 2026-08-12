@@ -4,7 +4,8 @@
     "version": "1.0.0",
     "description": "Plataforma de inteligência geoespacial para validação ambiental de imóveis rurais conforme o Manual de Crédito Rural (MCR).",
     "workspaces": [
-        "backend"
+        "backend",
+        "frontend"
     ],
     "scripts": {
         "prepare": "husky"

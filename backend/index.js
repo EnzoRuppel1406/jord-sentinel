@@ -3,9 +3,12 @@ import express from 'express'
 import { router as companyRouter } from './src/companies/routes/company.js'
 import { router as roleRouter } from './src/roles/routes/role.js'
 import { router as userRouter } from './src/users/routes/user.js'
+import cors from 'cors'
 
 const app = express()
+app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded())
 app.use('/api/companies', companyRouter)
 app.use('/api/roles', roleRouter)
 app.use('/api/users', userRouter)

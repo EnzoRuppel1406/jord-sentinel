@@ -1,10 +1,9 @@
 {
     "name": "jord-sentinel-backend",
     "version": "1.0.0",
-    "description": "Backend da plataforma Jörð Sentinel.",
+    "description": "Backend da plataforma Jord Sentinel.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint",
         "format": "prettier --write",
         "start:dev": "node --watch index.js",
@@ -22,6 +21,7 @@
     },
     "dependencies": {
         "bcrypt": "^6.0.0",
+        "cors": "^2.8.6",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
         "pg": "^8.22.0",

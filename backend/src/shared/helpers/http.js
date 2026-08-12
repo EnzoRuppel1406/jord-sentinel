@@ -8,3 +8,5 @@ export const serverError = () => ({
 export const notFound = (body) => ({ statusCode: 404, body })
 
 export const ok = (body) => ({ statusCode: 200, body })
+
+export const unauthorized = (body) => ({ statusCode: 401, body })
