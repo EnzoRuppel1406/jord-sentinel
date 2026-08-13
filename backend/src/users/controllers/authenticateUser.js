@@ -1,3 +1,4 @@
+import { InvalidCredentialsError } from '../../shared/errors/user.js'
 import { badRequest, ok, serverError, unauthorized } from '../../shared/helpers/index.js'
 import { AuthenticateUserUseCase } from '../use-cases/index.js'
 
@@ -14,12 +15,11 @@ export class AuthenticateUserController {
 
             const user = await authenticateUserUseCase.execute(email, password)
 
-            if (!user) {
-                return unauthorized({ message: 'Invalid email or password' })
-            }
-
             return ok(user)
         } catch (error) {
+            if (error instanceof InvalidCredentialsError) {
+                return unauthorized({ message: error.message })
+            }
             console.log(error)
             return serverError()
         }

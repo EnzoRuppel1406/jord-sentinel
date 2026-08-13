@@ -1,3 +1,4 @@
+import { InvalidCredentialsError } from '../../shared/errors/user.js'
 import { PostgresUserRepository } from '../repositories/user.js'
 import bcrypt from 'bcrypt'
 
@@ -8,13 +9,13 @@ export class AuthenticateUserUseCase {
         const user = await postgresUserRepository.getByEmail(email)
 
         if (!user) {
-            return null
+            throw new InvalidCredentialsError()
         }
 
         const passwordMatches = await bcrypt.compare(password, user.password)
 
         if (!passwordMatches) {
-            return null
+            throw new InvalidCredentialsError()
         }
 
         return user
