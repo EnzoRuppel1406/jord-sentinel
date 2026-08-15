@@ -8,7 +8,9 @@
         "frontend"
     ],
     "scripts": {
-        "prepare": "husky"
+        "prepare": "husky",
+        "front": "npm run -w frontend dev",
+        "back": "npm run -w backend start:dev"
     },
     "keywords": [],
     "author": "",

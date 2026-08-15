@@ -9,14 +9,22 @@ const Sidebar = () => {
                     <SidebarItem
                         icon={<LayoutDashboard size={32} absoluteStrokeWidth={true} />}
                         to={'/dashboard'}
-                        label={'Home'}
+                        label={'Dashboard'}
                         active={true}
                     />
-                    <SidebarItem icon={<FileChartLine size={32} />} to={''} label={'Consultar'} />
-                    <SidebarItem icon={<FolderClock size={32} />} to={''} label={'Historico'} />
+                    <SidebarItem
+                        icon={<FileChartLine size={32} />}
+                        to={'/search'}
+                        label={'Consultar'}
+                    />
+                    <SidebarItem
+                        icon={<FolderClock size={32} />}
+                        to={'/history'}
+                        label={'Historico'}
+                    />
                     <SidebarItem
                         icon={<UserRoundCog size={32} />}
-                        to={''}
+                        to={'/admin'}
                         label={'Gestao de Usuarios'}
                     />
                 </ul>
