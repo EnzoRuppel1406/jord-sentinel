@@ -1,7 +1,7 @@
+import DashboardChart from '../components/DashboardChart'
+import DashboardMap from '../components/DashboardMap'
 import Sidebar from '../components/Sidebar'
 import { FileChartLine, FileExclamationPoint, LandPlot } from 'lucide-react'
-import { Line, LineChart } from 'recharts'
-import { RechartsDevtools } from '@recharts/devtools'
 
 const Dashboard = () => {
     return (
@@ -36,22 +36,11 @@ const Dashboard = () => {
                         </article>
                     </section>
                     <section className="flex h-3/4 w-4/6 flex-row items-center gap-6 rounded-xl border-2 border-(--menu-color) p-6">
-                        <section className="flex h-full w-1/2 items-center justify-center border-2 border-(--menu-color)">
-                            <LineChart
-                                style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }}
-                                responsive
-                                data={[
-                                    { name: 'UC', uv: 120 },
-                                    { name: 'Ibama', uv: 230 },
-                                    { name: 'PRODES', uv: 300 },
-                                ]}
-                            >
-                                <Line dataKey="uv" />
-                                <RechartsDevtools />
-                            </LineChart>
+                        <section className="flex h-full w-1/2 items-center justify-center border-2 border-(--menu-color) p-8">
+                            <DashboardChart />
                         </section>
                         <section className="h-full w-1/2 border-2 border-(--menu-color)">
-                            MAPA
+                            <DashboardMap />
                         </section>
                     </section>
                 </section>
