@@ -1,5 +1,5 @@
 import DashboardChart from '../components/DashboardChart'
-import DashboardMap from '../components/DashboardMap'
+import Map from '../components/Map'
 import Sidebar from '../components/Sidebar'
 import { FileChartLine, FileExclamationPoint, LandPlot } from 'lucide-react'
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
                             <DashboardChart />
                         </section>
                         <section className="h-full w-1/2 border-2 border-(--menu-color)">
-                            <DashboardMap />
+                            <Map />
                         </section>
                     </section>
                 </section>

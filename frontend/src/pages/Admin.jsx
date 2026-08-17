@@ -1,5 +1,7 @@
+import InDevelopment from '../components/InDevelopment'
+
 const Admin = () => {
-    return <div>Admin</div>
+    return <InDevelopment />
 }
 
 export default Admin

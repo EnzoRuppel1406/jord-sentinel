@@ -1,6 +1,6 @@
 import { FileDown, FileUp, MapPin } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
-import DashboardMap from '../components/DashboardMap'
+import Map from '../components/Map'
 
 const Search = () => {
     return (
@@ -107,7 +107,7 @@ const Search = () => {
                         </section>
                     </section>
                     <section className="h-full w-full border-2">
-                        <DashboardMap />
+                        <Map />
                     </section>
                 </section>
             </section>

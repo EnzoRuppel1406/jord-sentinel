@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
-const DashboardMap = () => {
+const Map = () => {
     return (
         <MapContainer center={[-24.04583, -52.38278]} zoom={13}>
             <TileLayer
@@ -12,4 +12,4 @@ const DashboardMap = () => {
     )
 }
 
-export default DashboardMap
+export default Map
