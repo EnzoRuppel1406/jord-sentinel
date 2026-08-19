@@ -7,9 +7,9 @@ const Search = () => {
         <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
             <Sidebar />
             <section className="h-screen w-full p-12 pl-24">
-                <section className="flex h-full w-full flex-col gap-5 bg-slate-500 p-4">
-                    <section className="h-fit w-full rounded-xl border border-white p-6">
-                        <p className="font-bold tracking-wider text-white uppercase">
+                <section className="flex h-full w-full flex-col gap-5 p-4">
+                    <section className="h-fit w-full rounded-xl border border-(--menu-color) p-6">
+                        <p className="font-bold tracking-wider text-(--menu-color) uppercase">
                             Consulta Cadastro Ambiental Rural
                         </p>
                         <section className="flex gap-4">
@@ -32,15 +32,15 @@ const Search = () => {
                             </p>
                         </section>
                     </section>
-                    <section className="flex h-full w-full justify-between gap-3 border">
-                        <section className="flex h-full w-1/2 flex-col gap-4 bg-white p-2">
+                    <section className="flex h-full w-full justify-between gap-3 rounded-xl border">
+                        <section className="flex h-full w-1/2 flex-col gap-4 p-2">
                             <h1 className="flex w-full justify-between p-3">
                                 Imovel Rural
                                 <span className="rounded-1 bg-lime-100 p-1 font-medium text-green-950 uppercase">
                                     Sem Restricoes
                                 </span>
                             </h1>
-                            <section className="grid h-fit w-full grid-cols-3 gap-4 border text-center whitespace-nowrap">
+                            <section className="grid h-fit w-full grid-cols-3 gap-4 border bg-slate-200 text-center whitespace-nowrap">
                                 <h1>CAR</h1>
                                 <h1>Area (ha)</h1>
                                 <h1>Mod. Fiscais</h1>
@@ -70,8 +70,8 @@ const Search = () => {
                                 </article>
                             </section>
                         </section>
-                        <section className="flex h-full w-1/2 flex-col gap-4 bg-black p-4">
-                            <section className="h-fit w-1/2 bg-slate-600 p-2">
+                        <section className="flex h-full w-1/2 flex-col gap-4 p-4">
+                            <section className="h-fit w-1/2 bg-[#7fc588] p-2">
                                 <h2 className="font-light uppercase">Parecer consolidado</h2>
                                 <h1 className="font-bold tracking-widest text-amber-700 uppercase">
                                     Impedido
@@ -80,11 +80,11 @@ const Search = () => {
                                     A contratação de crédito rural fica vedada nos termos do MCR até
                                     saneamento das restrições identificadas.
                                 </p>
-                                <p className="w-fit border border-amber-600 bg-amber-400 p-1 tracking-wide">
+                                <p className="w-fit border border-amber-600 bg-orange-200 p-1 font-medium tracking-wide">
                                     Ref. MCR 2.6.2
                                 </p>
                             </section>
-                            <section className="flex w-1/2 flex-col bg-slate-600 p-2">
+                            <section className="flex w-1/2 flex-col bg-[#7fc588] p-2">
                                 <p className="flex">
                                     <span>
                                         <MapPin />
@@ -93,7 +93,7 @@ const Search = () => {
                                 </p>
                                 <p className="font-semibold">-24.1419444444, -52.3730555556</p>
                             </section>
-                            <section className="flex w-1/2 cursor-pointer flex-col border-slate-950 bg-slate-600 p-2 hover:border-2 hover:bg-slate-200">
+                            <section className="flex w-1/2 cursor-pointer flex-col border-slate-950 bg-[#7fc588] p-2 hover:border-2 hover:bg-slate-200">
                                 <h1 className="flex font-semibold">
                                     <span>
                                         <FileDown />

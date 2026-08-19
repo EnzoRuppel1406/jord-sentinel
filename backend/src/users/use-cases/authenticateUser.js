@@ -1,6 +1,8 @@
+import 'dotenv/config'
 import { InvalidCredentialsError } from '../../shared/errors/user.js'
 import { PostgresUserRepository } from '../repositories/user.js'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 export class AuthenticateUserUseCase {
     async execute(email, password) {
@@ -18,6 +20,14 @@ export class AuthenticateUserUseCase {
             throw new InvalidCredentialsError()
         }
 
-        return user
+        const token = jwt.sign(
+            { sub: user.id, name: user.name, email: user.email },
+            process.env.ACCESS_TOKEN_KEY,
+            {
+                expiresIn: '7d',
+            }
+        )
+
+        return token
     }
 }

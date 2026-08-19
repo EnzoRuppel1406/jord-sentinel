@@ -1,11 +1,13 @@
-import axios from 'axios'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import jordText from '../assets/jord_text.png'
 import jordTree from '../assets/jord_tree.png'
 import { useNavigate } from 'react-router-dom'
+import { api } from '../services/api.js'
+import { AuthContext } from '../contexts/AuthContext.jsx'
 
 const Login = () => {
     const navigate = useNavigate()
+    const { checkAuthentication } = useContext(AuthContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -14,12 +16,13 @@ const Login = () => {
         event.preventDefault()
         setError('')
         try {
-            const response = await axios.post('http://localhost:3000/api/users/login', {
+            await api.post('/users/login', {
                 email,
                 password,
             })
 
-            response.data ? navigate('/dashboard') : null
+            await checkAuthentication()
+            navigate('/dashboard')
         } catch (error) {
             console.error(`Deu algum erro ${error}`)
 

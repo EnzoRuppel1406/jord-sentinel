@@ -13,9 +13,24 @@ export class AuthenticateUserController {
 
             const authenticateUserUseCase = new AuthenticateUserUseCase()
 
-            const user = await authenticateUserUseCase.execute(email, password)
+            const token = await authenticateUserUseCase.execute(email, password)
 
-            return ok(user)
+            const cookie = {
+                name: 'access_token',
+                value: token,
+                options: {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'strict',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                },
+            }
+
+            const userAuthenticatedResponse = {
+                message: 'User authenticated successfully',
+            }
+
+            return ok(userAuthenticatedResponse, cookie)
         } catch (error) {
             if (error instanceof InvalidCredentialsError) {
                 return unauthorized({ message: error.message })

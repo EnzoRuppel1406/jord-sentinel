@@ -7,6 +7,7 @@ import {
     UpdateUserController,
     AuthenticateUserController,
 } from '../controllers/index.js'
+import { authMiddleware } from '../../shared/middlewares/auth.js'
 
 export const router = express.Router()
 
@@ -14,6 +15,36 @@ router.post('/', async (req, res) => {
     const createUserController = new CreateUserController()
 
     const { statusCode, body } = await createUserController.execute(req)
+
+    res.status(statusCode).send(body)
+})
+
+router.post('/login', async (req, res) => {
+    const authenticateUserController = new AuthenticateUserController()
+
+    const { statusCode, body, cookie } = await authenticateUserController.execute(req)
+
+    if (cookie) {
+        const { name, value, options } = cookie
+
+        res.cookie(name, value, options)
+    }
+
+    res.status(statusCode).send(body)
+})
+
+router.get('/me', authMiddleware, async (req, res) => {
+    res.send({
+        userId: req.user.sub,
+        name: req.user.name,
+        email: req.user.email,
+    })
+})
+
+router.get('/email/:userEmail', async (req, res) => {
+    const getUserByEmailController = new GetUserByEmailController()
+
+    const { statusCode, body } = await getUserByEmailController.execute(req)
 
     res.status(statusCode).send(body)
 })
@@ -41,19 +72,3 @@ router
 
         res.status(statusCode).send(body)
     })
-
-router.get('/email/:userEmail', async (req, res) => {
-    const getUserByEmailController = new GetUserByEmailController()
-
-    const { statusCode, body } = await getUserByEmailController.execute(req)
-
-    res.status(statusCode).send(body)
-})
-
-router.post('/login', async (req, res) => {
-    const authenticateUserController = new AuthenticateUserController()
-
-    const { statusCode, body } = await authenticateUserController.execute(req)
-
-    res.status(statusCode).send(body)
-})

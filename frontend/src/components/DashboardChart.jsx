@@ -13,10 +13,10 @@ const DashboardChart = () => {
     return (
         <ResponsiveContainer width="100%" height="100%">
             <BarChart responsive data={restrictions} layout="vertical">
-                <YAxis dataKey="name" type="category" />
+                <YAxis dataKey="name" type="category" width={'auto'} />
                 <XAxis type="number" />
                 <Tooltip />
-                <Bar type="monotone" dataKey="overlays" fill="#fff" radius={[0, 10, 10, 0]}>
+                <Bar type="monotone"  dataKey="overlays" fill="#fff" radius={[0, 10, 10, 0]}>
                     {restrictions.map((findEntryInArray, index) => {
                         let barColor = '#000'
                         if (findEntryInArray.name === 'UC') {
@@ -29,7 +29,7 @@ const DashboardChart = () => {
                             barColor = '#fff'
                         }
                         if (findEntryInArray.name === 'Floresta Publica') {
-                            barColor = '#00ff00'
+                            barColor = '#00aa00'
                         }
                         if (findEntryInArray.name === 'Indigena') {
                             barColor = '#8f33ff'
