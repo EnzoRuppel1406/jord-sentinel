@@ -38,6 +38,8 @@ router.get('/me', authMiddleware, async (req, res) => {
         userId: req.user.sub,
         name: req.user.name,
         email: req.user.email,
+        companyId: req.user.companyId,
+        roleId: req.user.roleId,
     })
 })
 

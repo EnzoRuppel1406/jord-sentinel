@@ -1,12 +1,12 @@
 import { EmailAlreadyInUseError } from '../../shared/errors/user.js'
 import {
-    ok,
     badRequest,
     serverError,
     checkIfEmailIsValid,
     checkIfPasswordIsValid,
     invalidEmailResponse,
     invalidPasswordResponse,
+    created,
 } from '../../shared/helpers/index.js'
 import { CreateUserUseCase } from '../use-cases/index.js'
 
@@ -39,7 +39,7 @@ export class CreateUserController {
 
             const createdUser = await createUserUseCase.execute(params)
 
-            return ok(createdUser)
+            return created(createdUser)
         } catch (error) {
             if (error instanceof EmailAlreadyInUseError) {
                 return badRequest({ message: error.message })

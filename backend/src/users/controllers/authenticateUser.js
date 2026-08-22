@@ -30,6 +30,8 @@ export class AuthenticateUserController {
                 message: 'User authenticated successfully',
             }
 
+            console.log(cookie)
+
             return ok(userAuthenticatedResponse, cookie)
         } catch (error) {
             if (error instanceof InvalidCredentialsError) {

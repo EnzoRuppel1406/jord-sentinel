@@ -1,4 +1,4 @@
-import { badRequest, ok, serverError } from '../../shared/helpers/index.js'
+import { badRequest, created, serverError } from '../../shared/helpers/index.js'
 import { CreateRoleUseCase } from '../use-cases/index.js'
 
 export class CreateRoleController {
@@ -18,7 +18,7 @@ export class CreateRoleController {
 
             const createdRole = await createRoleUseCase.execute(params)
 
-            return ok(createdRole)
+            return created(createdRole)
         } catch (error) {
             console.log(error)
             return serverError()

@@ -1,5 +1,5 @@
 import { CreateCompanyUseCase } from '../use-cases/index.js'
-import { badRequest, ok, serverError } from '../../shared/helpers/index.js'
+import { badRequest, created, serverError } from '../../shared/helpers/index.js'
 
 export class CreateCompanyController {
     async execute(httpRequest) {
@@ -18,7 +18,7 @@ export class CreateCompanyController {
 
             const createdCompany = await createCompanyUseCase.execute(params)
 
-            return ok(createdCompany)
+            return created(createdCompany)
         } catch (error) {
             console.log(error)
             return serverError()
