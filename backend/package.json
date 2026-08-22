@@ -6,8 +6,7 @@
     "scripts": {
         "lint": "eslint",
         "format": "prettier --write",
-        "start:dev": "node --watch index.js",
-        "migrate": "node ./src/database/postgres/migrations/migrate.js"
+        "start:dev": "node --watch index.js"
     },
     "keywords": [],
     "author": "",
