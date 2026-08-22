@@ -10,6 +10,8 @@ export class CreateAnalysisController {
     async execute(httpRequest, user) {
         const createAnalysisParams = httpRequest.body
 
+        const { findings } = createAnalysisParams
+
         const { sub: userId, companyId } = user
 
         const userIdIsValid = checkIfIdIsValid(userId)
@@ -19,11 +21,23 @@ export class CreateAnalysisController {
             return invalidResponse()
         }
 
+        if (findings) {
+            const findingsRequiredFields = ['restriction', 'area', 'details']
+
+            for (const finding of findings) {
+                for (const field of findingsRequiredFields) {
+                    if (!finding[field]) {
+                        badRequest({ message: `Missing param ${field}.` })
+                    }
+                }
+            }
+        }
+
         const params = { ...createAnalysisParams, userId, companyId }
 
-        const requiredFields = ['userId', 'companyId', 'status', 'carCode']
+        const analysisRequiredFields = ['userId', 'companyId', 'status', 'carCode']
 
-        for (const field of requiredFields) {
+        for (const field of analysisRequiredFields) {
             if (!params[field] || params[field].trim().length === 0) {
                 return badRequest({ message: `Missing param ${field}.` })
             }

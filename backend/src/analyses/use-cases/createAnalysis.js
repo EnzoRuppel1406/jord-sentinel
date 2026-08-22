@@ -7,7 +7,21 @@ export class CreateAnalysisUseCase {
 
         const postgresAnalysesRepository = new PostgresAnalysisRepository()
 
-        const params = { ...createAnalysisParams, id: analysisId }
+        const { findings } = createAnalysisParams
+
+        const params = {
+            ...createAnalysisParams,
+            id: analysisId,
+            findings: findings.map((finding) => {
+                return {
+                    id: uuidv4(),
+                    analysisId,
+                    restrictionType: finding.restriction,
+                    area: finding.area,
+                    details: finding.details,
+                }
+            }),
+        }
 
         const createdAnalysis = await postgresAnalysesRepository.create(params)
 
