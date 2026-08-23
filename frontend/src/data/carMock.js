@@ -17,9 +17,11 @@ const cars = [
                 type: 'Embargo',
                 area: 1013.9673,
                 source: 'Ibama',
-                classification: 'Impeditivo',
-                description:
-                    'Explorar seletivamente determinadas espécies nativas nas áreas cobertas por vegetação primária ou nos estágios avançado e médio de regeneração na Mata Atlântica, sem autorização do órgão competente.',
+                details: {
+                    classification: 'Impeditivo',
+                    description:
+                        'Explorar seletivamente determinadas espécies nativas nas áreas cobertas por vegetação primária ou nos estágios avançado e médio de regeneração na Mata Atlântica, sem autorização do órgão competente.',
+                },
                 geometry: {
                     type: 'Polygon',
                     coordinates: [
@@ -2279,7 +2281,7 @@ const cars = [
         ],
 
         evaluation: {
-            status: 'Impedido',
+            status: 'Restrito',
             description:
                 'A contratação de crédito rural fica vedada nos termos do MCR até o saneamento das restrições identificadas.',
             reference: 'MCR 2.6.2',

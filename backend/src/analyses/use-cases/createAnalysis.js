@@ -7,21 +7,23 @@ export class CreateAnalysisUseCase {
 
         const postgresAnalysesRepository = new PostgresAnalysisRepository()
 
-        const { findings } = createAnalysisParams
+        const { restrictions } = createAnalysisParams
 
         const params = {
             ...createAnalysisParams,
             id: analysisId,
-            findings: findings.map((finding) => {
+            restrictions: restrictions.map((restriction) => {
                 return {
                     id: uuidv4(),
                     analysisId,
-                    restrictionType: finding.restriction,
-                    area: finding.area,
-                    details: finding.details,
+                    restrictionType: restriction.type,
+                    area: restriction.area,
+                    details: restriction.details,
                 }
             }),
         }
+
+        params.status === 'Restrito' ? (params.status = 'restricted') : (params.status = 'free')
 
         const createdAnalysis = await postgresAnalysesRepository.create(params)
 

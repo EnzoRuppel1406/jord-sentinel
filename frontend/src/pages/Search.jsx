@@ -5,6 +5,7 @@ import cars from '../data/carMock'
 import RestrictionCard from '../components/RestrictionCard'
 import AnalisysMap from '../components/AnalysisMap'
 import Map from '../components/Map'
+import { api } from '../services/api'
 
 const Search = () => {
     const [carCode, setCarCode] = useState('')
@@ -13,12 +14,21 @@ const Search = () => {
     const [notFound, setNotFound] = useState(false)
     const [searchedCode, setSearchedCode] = useState('')
 
+    const registerSearch = async ({ code: carCode, evaluation, restrictions }) => {
+        try {
+            await api.post('/analyses', { carCode, status: evaluation.status, restrictions })
+        } catch (error) {
+            console.error(`Deu algum erro ${error}`)
+        }
+    }
+
     const handleSearch = () => {
         const foundCar = cars.find((car) => car.code === carCode)
 
         if (foundCar) {
             setCar(foundCar)
             setNotFound(false)
+            registerSearch(foundCar)
         } else {
             setCar(null)
             setNotFound(true)
@@ -96,8 +106,8 @@ const Search = () => {
                                                 type={restriction.type}
                                                 area={restriction.area}
                                                 source={restriction.source}
-                                                classification={restriction.classification}
-                                                description={restriction.description}
+                                                classification={restriction.details.classification}
+                                                description={restriction.details.description}
                                             />
                                         ))}
                                     </section>

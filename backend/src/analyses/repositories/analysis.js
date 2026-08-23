@@ -16,16 +16,16 @@ export class PostgresAnalysisRepository {
                 ]
             )
 
-            if (createAnalysisParams.findings) {
-                for (const finding of createAnalysisParams.findings) {
+            if (createAnalysisParams.restrictions) {
+                for (const restriction of createAnalysisParams.restrictions) {
                     await PostgresClient.query(
                         'INSERT INTO analyses_findings (id, analysis_id, restriction_type, overlay_area, details) VALUES ($1, $2, $3, $4, $5)',
                         [
-                            finding.id,
-                            finding.analysisId,
-                            finding.restrictionType,
-                            finding.area,
-                            finding.details,
+                            restriction.id,
+                            restriction.analysisId,
+                            restriction.restrictionType,
+                            restriction.area,
+                            restriction.details,
                         ]
                     )
                 }
@@ -43,5 +43,14 @@ export class PostgresAnalysisRepository {
         )
 
         return analysis
+    }
+
+    async listByCompanyId(companyId) {
+        const analysesList = await PostgresClient.query(
+            'SELECT id, user_id, analysis_status, car_code, created_at FROM analyses WHERE company_id = $1',
+            [companyId]
+        )
+
+        return analysesList
     }
 }
