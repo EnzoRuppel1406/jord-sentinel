@@ -37,7 +37,3 @@ export class ListAnalysesByCompanyIdUseCase {
         return analysesList
     }
 }
-
-const test = new ListAnalysesByCompanyIdUseCase()
-
-test.execute('86f81fa0-b62b-4983-a0b4-30d2332d6662')

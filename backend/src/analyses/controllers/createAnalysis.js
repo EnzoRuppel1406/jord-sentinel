@@ -29,7 +29,7 @@ export class CreateAnalysisController {
                 for (const restriction of restrictions) {
                     for (const field of restrictionsRequiredFields) {
                         if (!restriction[field]) {
-                            badRequest({ message: `Missing param ${field}.` })
+                            return badRequest({ message: `Missing param ${field}.` })
                         }
                     }
                 }
@@ -45,7 +45,6 @@ export class CreateAnalysisController {
                 }
             }
 
-            console.log(params)
             const createAnalysisUseCase = new CreateAnalysisUseCase()
 
             const analysis = await createAnalysisUseCase.execute(params)

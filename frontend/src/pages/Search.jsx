@@ -95,7 +95,7 @@ const Search = () => {
                                         <p>{car.property.rectifiedAt}</p>
                                         <p>{`${car.property.city} / ${car.property.state}`}</p>
                                     </section>
-                                    <section className="h-fit w-full">
+                                    <section className="flex h-fit w-full flex-col gap-2">
                                         <p className="font-semibold tracking-wider uppercase">
                                             Restricoes encontradas
                                         </p>
@@ -173,6 +173,7 @@ const Search = () => {
                                 long={car.centroid.longitude}
                                 carGeometry={car.geometry.coordinates}
                                 restrictionGeometry={car.restrictions[0].geometry.coordinates}
+                                restrictions={car.restrictions}
                                 searchTrigger={searchCount}
                             />
                         ) : (

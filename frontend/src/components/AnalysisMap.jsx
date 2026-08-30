@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css'
 import AutoFitBounds from '../hooks/AutoFitBounds'
 import { useMemo } from 'react'
 
-const AnalisysMap = ({ lat, long, carGeometry, restrictionGeometry, searchTrigger }) => {
+const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger }) => {
     const fixPolygons = (geometry) => {
         if (!geometry || !Array.isArray(geometry) || geometry.length === 0) return []
 
@@ -27,10 +27,22 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictionGeometry, searchTrigge
     }
 
     const carPositions = useMemo(() => fixPolygons(carGeometry), [carGeometry])
-    const restrictionPositions = useMemo(
-        () => fixPolygons(restrictionGeometry),
-        [restrictionGeometry]
-    )
+    const restrictionPositions = useMemo(() => {
+        if (!Array.isArray(restrictions)) return []
+        return restrictions.map((restriction) => {
+            const coords = restriction?.geometry?.coordinates
+            return fixPolygons(coords)
+        })
+    }, [restrictions])
+
+    const rescritionColors = {
+        'Terra Indígena': '#7203AD',
+        'Unidade de Conservação': '#13077D',
+        Embargo: '#9E0202',
+        'Floresta Pública': '#59FA48',
+        Quilombo: '#380E00',
+        PRODES: '#ddd',
+    }
 
     return (
         <MapContainer center={[lat || -24.04583, long || -52.38278]} zoom={15}>
@@ -48,7 +60,13 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictionGeometry, searchTrigge
             />
 
             <Polygon pathOptions={{ color: 'yellow' }} positions={carPositions} />
-            <Polygon pathOptions={{ color: 'red' }} positions={restrictionPositions} />
+            {restrictionPositions.map((positions, index) => (
+                <Polygon
+                    key={restrictions[index]?.id || index}
+                    pathOptions={{ color: rescritionColors[restrictions[index].type] }}
+                    positions={positions}
+                />
+            ))}
         </MapContainer>
     )
 }
