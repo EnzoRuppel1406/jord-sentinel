@@ -2,6 +2,7 @@ import { MapContainer, Polygon, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import AutoFitBounds from '../hooks/AutoFitBounds'
 import { useMemo } from 'react'
+import MapLegend from './MapLegend'
 
 const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger }) => {
     const fixPolygons = (geometry) => {
@@ -59,7 +60,7 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger 
                 long={long}
             />
 
-            <Polygon pathOptions={{ color: 'yellow' }} positions={carPositions} />
+            <Polygon pathOptions={{ color: '#FFEB4F' }} positions={carPositions} />
             {restrictionPositions.map((positions, index) => (
                 <Polygon
                     key={restrictions[index]?.id || index}
@@ -67,6 +68,8 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger 
                     positions={positions}
                 />
             ))}
+
+            <MapLegend />
         </MapContainer>
     )
 }

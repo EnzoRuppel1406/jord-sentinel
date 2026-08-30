@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import MapLegend from './MapLegend'
 
 const Map = () => {
     return (
@@ -8,6 +9,7 @@ const Map = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <MapLegend />
         </MapContainer>
     )
 }
