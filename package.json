@@ -12,6 +12,7 @@
         "front": "npm run -w frontend dev",
         "back": "npm run -w backend start:dev",
         "migrate": "node backend/src/database/postgres/migrations/migrate.js",
+        "seed": "node backend/src/database/postgres/seeds/seed.js",
         "start": "concurrently \"npm run back\" \"npm run front\""
     },
     "keywords": [],
