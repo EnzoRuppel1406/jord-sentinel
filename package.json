@@ -13,7 +13,11 @@
         "back": "npm run -w backend start:dev",
         "migrate": "node backend/src/database/postgres/migrations/migrate.js",
         "seed": "node backend/src/database/postgres/seeds/seed.js",
-        "start": "concurrently \"npm run back\" \"npm run front\""
+        "start": "concurrently \"npm run back\" \"npm run front\"",
+        "db:up": "docker compose up -d",
+        "db:down": "docker compose down",
+        "db:start": "docker compose start",
+        "db:stop": "docker compose stop"
     },
     "keywords": [],
     "author": "",
