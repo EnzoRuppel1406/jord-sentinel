@@ -26,12 +26,6 @@ npm install
 
 ## 3. Configurar o banco de dados
 
-Crie um banco PostgreSQL para o projeto.
-
-```sql
-CREATE DATABASE jord_sentinel;
-```
-
 Configure as variáveis de ambiente do backend no arquivo `.env`:
 
 ```env
@@ -44,6 +38,11 @@ DB_USER=postgres
 DB_PASSWORD=sua_senha
 
 ACCESS_TOKEN_KEY=sua_chave_secreta
+```
+
+Execute o script para criar a imagem do PostgreSQL:
+```bash
+npm run db:up
 ```
 
 ## 4. Executar as migrations
