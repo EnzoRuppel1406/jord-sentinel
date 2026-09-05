@@ -215,7 +215,9 @@ cd jord-sentinel
 
 npm install
 
-# Criar e configurar o banco PostgreSQL
+# Criar e configurar o arquivo .env
+
+npm run db:up
 
 npm run migrate
 npm run seed
