@@ -29,15 +29,14 @@ npm install
 Configure as variáveis de ambiente do backend no arquivo `.env`:
 
 ```env
-PORT=3000
+BACKEND_PORT=3000
+FRONTEND_PORT=5173
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=jord_sentinel
-DB_USER=postgres
-DB_PASSWORD=sua_senha
-
-ACCESS_TOKEN_KEY=sua_chave_secreta
+POSTGRES_PORT=5432
+POSTGRES_DB=my_database
+POSTGRES_USER=my_user
+POSTGRES_PASSWORD=my_secure_password
+ACCESS_TOKEN_KEY=my_special_secret
 ```
 
 Execute o script para criar a imagem do PostgreSQL:
