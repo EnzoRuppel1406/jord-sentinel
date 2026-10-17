@@ -21,8 +21,13 @@ export const invalidEmailResponse = () =>
 export const invalidPasswordResponse = () =>
     badRequest({ message: 'Password must be at least 8 characters' })
 
+export const invalidCarCodeResponse = () =>
+    badRequest({ message: 'The provided code is not valid.' })
+
 export const companyNotFoundResponse = () => notFound({ message: 'Company not found.' })
 
 export const roleNotFoundResponse = () => notFound({ message: 'Role not found.' })
 
 export const userNotFoundResponse = () => notFound({ message: 'User not found.' })
+
+export const propertyNotFoundResponse = () => notFound({ message: 'Property not found.' })

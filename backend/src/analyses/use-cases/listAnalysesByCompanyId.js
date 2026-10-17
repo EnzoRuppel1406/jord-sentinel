@@ -1,4 +1,4 @@
-import { PostgresAnalysisRepository } from '../repositories/analysis.js'
+import { PostgresAnalysisRepository } from '../repositories/postgres/analysis.js'
 import { PostgresUserRepository } from '../../users/repositories/user.js'
 import { PostgresCompanyRepository } from '../../companies/repositories/postgres/company.js'
 

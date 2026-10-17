@@ -6,6 +6,7 @@ import { router as companyRouter } from './src/companies/routes/company.js'
 import { router as roleRouter } from './src/roles/routes/role.js'
 import { router as userRouter } from './src/users/routes/user.js'
 import { router as analysisRouter } from './src/analyses/routes/analysis.js'
+import { router as geospatialRouter } from './src/geospatial/routes/geospatial.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
@@ -27,6 +28,7 @@ app.use('/api/companies', companyRouter)
 app.use('/api/roles', roleRouter)
 app.use('/api/users', userRouter)
 app.use('/api/analyses', analysisRouter)
+app.use('/api/geospatial', geospatialRouter)
 
 app.listen(process.env.BACKEND_PORT, () =>
     console.log(`listening on port ${process.env.BACKEND_PORT}`)
