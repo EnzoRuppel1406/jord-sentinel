@@ -1,7 +1,6 @@
 import { FileDown, FileUp, MapPin } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import { useState } from 'react'
-import cars from '../data/carMock'
 import RestrictionCard from '../components/RestrictionCard'
 import AnalisysMap from '../components/AnalysisMap'
 import Map from '../components/Map'
@@ -13,29 +12,45 @@ const Search = () => {
     const [searchCount, setSearchCount] = useState(0)
     const [notFound, setNotFound] = useState(false)
     const [searchedCode, setSearchedCode] = useState('')
+    const [isSearching, setIsSearching] = useState(false)
 
-    const registerSearch = async ({ code: carCode, evaluation, restrictions }) => {
+    const registerSearch = async (carData) => {
         try {
-            await api.post('/analyses', { carCode, status: evaluation.status, restrictions })
+            await api.post('/analyses', {
+                carCode: carData.code,
+                status: carData.status,
+                restrictions: carData.restrictions ?? [],
+            })
         } catch (error) {
-            console.error(`Deu algum erro ${error}`)
+            console.error('Status:', error.response?.status)
+            console.error('Resposta do backend:', error.response?.data)
+            console.error('Erro completo:', error)
         }
     }
 
-    const handleSearch = () => {
-        const foundCar = cars.find((car) => car.code === carCode)
+    const handleSearch = async () => {
+        if (isSearching || !carCode.trim()) return
 
-        if (foundCar) {
-            setCar(foundCar)
-            setNotFound(false)
-            registerSearch(foundCar)
-        } else {
-            setCar(null)
-            setNotFound(true)
-            setSearchedCode(carCode)
-            setCarCode('')
+        setIsSearching(true)
+
+        try {
+            const foundCar = await api.get(`/geospatial/${carCode}`)
+            const carData = foundCar.data
+
+            if (carData) {
+                setCar(carData)
+                setNotFound(false)
+                registerSearch(carData)
+            } else {
+                setCar(null)
+                setNotFound(true)
+                setSearchedCode(carCode)
+                setCarCode('')
+            }
+            setSearchCount((prev) => prev + 1)
+        } finally {
+            setIsSearching(false)
         }
-        setSearchCount((prev) => prev + 1)
     }
 
     return (
@@ -60,9 +75,19 @@ const Search = () => {
                             <button
                                 type="submit"
                                 onClick={handleSearch}
+                                disabled={isSearching}
                                 className="w-1/6 cursor-pointer rounded-xl border-(--menu-color) bg-(--menu-color) p-2 text-(--main-bg) transition-colors duration-300 ease-in-out hover:border-2 hover:bg-stone-500"
                             >
-                                Buscar
+                                {isSearching ? (
+                                    <span className="inline-flex items-center justify-center gap-2">
+                                        <span
+                                            className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                                            aria-hidden="true"
+                                        ></span>
+                                    </span>
+                                ) : (
+                                    'Buscar'
+                                )}
                             </button>
                             <p className="flex w-1/6 cursor-pointer gap-4 rounded-xl border-(--menu-color) bg-(--menu-color) p-2 text-(--main-bg) transition-colors duration-300 ease-in-out hover:border-2 hover:bg-stone-500">
                                 <FileUp />
@@ -78,7 +103,13 @@ const Search = () => {
                                     <h1 className="flex w-full justify-between p-3">
                                         Imovel Rural
                                         <span className="rounded-1 bg-lime-100 p-1 font-medium text-green-950 uppercase">
-                                            {car.property.status}
+                                            {car.status === 'AT'
+                                                ? 'Ativo'
+                                                : car.status === 'PE'
+                                                  ? 'Pendente'
+                                                  : car.status === 'CA'
+                                                    ? 'Cancelado'
+                                                    : ''}
                                         </span>
                                     </h1>
                                     <section className="grid h-fit w-full grid-cols-3 gap-4 border bg-slate-200 text-center whitespace-nowrap">
@@ -86,30 +117,39 @@ const Search = () => {
                                         <h1>Area (ha)</h1>
                                         <h1>Mod. Fiscais</h1>
                                         <p>{car.code}</p>
-                                        <p>{car.property.area}</p>
-                                        <p>{car.property.fiscalModules}</p>
+                                        <p>{parseInt(car.area)}</p>
+                                        <p>{parseInt(car.fiscalModules)}</p>
                                         <h1>Data Criacao</h1>
                                         <h1>Ultima Retificacao</h1>
                                         <h1>Municipio</h1>
-                                        <p>{car.property.createdAt}</p>
-                                        <p>{car.property.rectifiedAt}</p>
-                                        <p>{`${car.property.city} / ${car.property.state}`}</p>
+                                        <p>{car.createdAt}</p>
+                                        <p>{car.rectifiedAt}</p>
+                                        <p>{`${car.city} / ${car.state}`}</p>
                                     </section>
                                     <section className="flex h-fit w-full flex-col gap-2">
                                         <p className="font-semibold tracking-wider uppercase">
                                             Restricoes encontradas
                                         </p>
 
-                                        {car.restrictions.map((restriction) => (
-                                            <RestrictionCard
-                                                key={restriction.type}
-                                                type={restriction.type}
-                                                area={restriction.area}
-                                                source={restriction.source}
-                                                classification={restriction.details.classification}
-                                                description={restriction.details.description}
-                                            />
-                                        ))}
+                                        {Array.isArray(car.restrictions) &&
+                                        car.restrictions.length > 0 ? (
+                                            car.restrictions.map((restriction, index) => (
+                                                <RestrictionCard
+                                                    key={`${restriction.type}-${index}`}
+                                                    type={restriction.type}
+                                                    area={restriction.area}
+                                                    source={restriction.source}
+                                                    classification={
+                                                        restriction.details?.classification
+                                                    }
+                                                    description={restriction.details?.description}
+                                                />
+                                            ))
+                                        ) : (
+                                            <p className="rounded-lg bg-slate-100 p-4 text-sm text-slate-600">
+                                                Nenhuma restrição encontrada para este imóvel.
+                                            </p>
+                                        )}
                                     </section>
                                 </section>
                                 <section className="flex h-full w-1/2 flex-col gap-4 p-4">
@@ -118,11 +158,19 @@ const Search = () => {
                                             Parecer consolidado
                                         </h2>
                                         <h1 className="font-bold tracking-widest text-amber-700 uppercase">
-                                            {car.evaluation.status}
+                                            {car?.evaluation?.status
+                                                ? car.evalutaion.status
+                                                : 'Inconclusivo'}
                                         </h1>
-                                        <p>{car.evaluation.description}</p>
+                                        <p>
+                                            {car?.evaluation?.description
+                                                ? car.evaluation.description
+                                                : 'Sem informacao'}
+                                        </p>
                                         <p className="w-fit border border-amber-600 bg-orange-200 p-1 font-medium tracking-wide">
-                                            {car.evaluation.reference}
+                                            {car?.evaluation?.reference
+                                                ? car.evaluation.reference
+                                                : 'Consulte o MCR para saber mais'}
                                         </p>
                                     </section>
                                     <section className="flex w-1/2 flex-col bg-[#7fc588] p-2">
@@ -172,8 +220,12 @@ const Search = () => {
                                 lat={car.centroid.latitude}
                                 long={car.centroid.longitude}
                                 carGeometry={car.geometry.coordinates}
-                                restrictionGeometry={car.restrictions[0].geometry.coordinates}
-                                restrictions={car.restrictions}
+                                restrictionGeometry={
+                                    car.restrictions?.[0]?.geometry?.coordinates ?? null
+                                }
+                                restrictions={
+                                    Array.isArray(car.restrictions) ? car.restrictions : []
+                                }
                                 searchTrigger={searchCount}
                             />
                         ) : (

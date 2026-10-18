@@ -26,9 +26,9 @@ export class CreateAnalysisUseCase {
         }
 
         const statusMap = {
-            'Sem restrições': 'free',
-            Restrito: 'restricted',
-            Condicional: 'conditional',
+            AT: 'free',
+            CA: 'restricted',
+            PE: 'conditional',
         }
 
         params.status = statusMap[params.status]

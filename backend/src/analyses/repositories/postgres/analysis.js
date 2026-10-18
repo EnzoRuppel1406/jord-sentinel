@@ -38,7 +38,7 @@ export class PostgresAnalysisRepository {
         }
 
         const analysis = await PostgresClient.query(
-            'SELECT * FROM analyses a JOIN analyses_findings f on a.id = f.analysis_id WHERE a.id = $1',
+            'SELECT * FROM analyses a LEFT JOIN analyses_findings f on a.id = f.analysis_id WHERE a.id = $1',
             [createAnalysisParams.id]
         )
 

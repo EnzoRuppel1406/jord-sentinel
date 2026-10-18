@@ -24,7 +24,19 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger 
             }
         })
 
-        return rings.length > 0 ? rings : [geometry]
+        const swapCoordinates = (coordinates) => {
+            if (!Array.isArray(coordinates)) return coordinates
+
+            if (typeof coordinates[0] === 'number' && typeof coordinates[1] === 'number') {
+                return [coordinates[1], coordinates[0], ...coordinates.slice(2)]
+            }
+
+            return coordinates.map(swapCoordinates)
+        }
+
+        const polygons = rings.length > 0 ? rings : [geometry]
+
+        return swapCoordinates(polygons)
     }
 
     const carPositions = useMemo(() => fixPolygons(carGeometry), [carGeometry])
