@@ -1,1 +1,2 @@
-export * from './findPropertyByCarCode.js'
+export * from './findPropertyWithRestrictionsByCarCode.js'
+export * from './findRestrictionsNearProperty.js'

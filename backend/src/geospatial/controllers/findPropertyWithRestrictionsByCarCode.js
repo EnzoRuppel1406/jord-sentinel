@@ -4,7 +4,7 @@ import {
     propertyNotFoundResponse,
     serverError,
 } from '../../shared/helpers/index.js'
-import { FindPropertyByCarCodeUseCase } from '../use-cases/findPropertyByCarCode.js'
+import { FindPropertyWithRestrictionsUseCase } from '../use-cases/index.js'
 
 export class FindPropertyByCarCodeController {
     async execute(httpRequest) {
@@ -15,9 +15,9 @@ export class FindPropertyByCarCodeController {
                 return invalidCarCodeResponse()
             }
 
-            const findPropertyByCarCodeUseCase = new FindPropertyByCarCodeUseCase()
+            const findPropertyWithRestrictionsUseCase = new FindPropertyWithRestrictionsUseCase()
 
-            const property = await findPropertyByCarCodeUseCase.execute(carCode)
+            const property = await findPropertyWithRestrictionsUseCase.execute(carCode)
 
             if (!property) {
                 return propertyNotFoundResponse()

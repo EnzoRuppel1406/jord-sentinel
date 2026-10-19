@@ -6,6 +6,10 @@ export class FindPropertyByCarCodeUseCase {
 
         const property = await postgresGeospatialRepository.findPropertyByCarCode(carCode)
 
+        if (!property) {
+            return null
+        }
+
         const result = {
             code: property.cod_imovel,
             fiscalModules: property.mod_fiscal,
