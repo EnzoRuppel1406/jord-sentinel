@@ -50,7 +50,21 @@ export class PostgresGeospatialRepository {
                     i.sit_desmat,
                     i.des_tad,
                     ST_Intersects(i.geom, p.geom) AS overlaps_property,
-                    ST_AsGeoJSON(ST_Transform(i.geom, 4326))::jsonb AS geometry
+                    ST_AsGeoJSON(ST_Transform(i.geom, 4326))::jsonb AS geometry,
+                    CASE 
+                        WHEN ST_Intersects(i.geom, p.geom) THEN
+                            ROUND(
+                                (
+                                    ST_Area(
+                                        ST_Transform(
+                                            ST_Intersection(i.geom, p.geom),
+                                            4326
+                                        )::geography
+                                    ) / 10000
+                                )::numeric,
+                                2
+                            )
+                    END AS overlap_area
                 FROM geospatial.ibama i
                 CROSS JOIN property p
                 WHERE ST_DWithin(
@@ -85,7 +99,21 @@ export class PostgresGeospatialRepository {
                     u.municipio,
                     u.org_gestor,
                     ST_Intersects(u.geom, p.geom) AS overlaps_property,
-                    ST_AsGeoJSON(ST_Transform(u.geom, 4326))::jsonb AS geometry
+                    ST_AsGeoJSON(ST_Transform(u.geom, 4326))::jsonb AS geometry,
+                    CASE 
+                        WHEN ST_Intersects(u.geom, p.geom) THEN
+                            ROUND(
+                                (
+                                    ST_Area(
+                                        ST_Transform(
+                                            ST_Intersection(u.geom, p.geom),
+                                            4326
+                                        )::geography
+                                    ) / 10000
+                                )::numeric,
+                                2
+                            )
+                    END AS overlap_area
                 FROM geospatial.cnuc u
                 CROSS JOIN property p
                 WHERE ST_DWithin(
@@ -118,7 +146,21 @@ export class PostgresGeospatialRepository {
                     i.fase_ti,
                     i.data_atual,
                     ST_Intersects(i.geom, p.geom) AS overlaps_property,
-                    ST_AsGeoJSON(ST_Transform(i.geom, 4326))::jsonb AS geometry
+                    ST_AsGeoJSON(ST_Transform(i.geom, 4326))::jsonb AS geometry,
+                    CASE 
+                        WHEN ST_Intersects(i.geom, p.geom) THEN
+                            ROUND(
+                                (
+                                    ST_Area(
+                                        ST_Transform(
+                                            ST_Intersection(i.geom, p.geom),
+                                            4326
+                                        )::geography
+                                    ) / 10000
+                                )::numeric,
+                                2
+                            )
+                    END AS overlap_area
                 FROM geospatial.funai i
                 CROSS JOIN property p
                 WHERE ST_DWithin(
@@ -151,7 +193,21 @@ export class PostgresGeospatialRepository {
                     f.uf,
                     f.bioma,
                     ST_Intersects(f.geom, p.geom) AS overlaps_property,
-                    ST_AsGeoJSON(ST_Transform(f.geom, 4326))::jsonb AS geometry
+                    ST_AsGeoJSON(ST_Transform(f.geom, 4326))::jsonb AS geometry,
+                    CASE 
+                        WHEN ST_Intersects(f.geom, p.geom) THEN
+                            ROUND(
+                                (
+                                    ST_Area(
+                                        ST_Transform(
+                                            ST_Intersection(f.geom, p.geom),
+                                            4326
+                                        )::geography
+                                    ) / 10000
+                                )::numeric,
+                                2
+                            )
+                    END AS overlap_area
                 FROM geospatial.public_forest f
                 CROSS JOIN property p
                 WHERE ST_DWithin(
@@ -205,7 +261,21 @@ export class PostgresGeospatialRepository {
                     p.image_date,
                     p.year,
                     ST_Intersects(p.geom, property.geom) AS overlaps_property,
-                    ST_AsGeoJSON(ST_Transform(p.geom, 4326))::jsonb AS geometry
+                    ST_AsGeoJSON(ST_Transform(p.geom, 4326))::jsonb AS geometry,
+                    CASE 
+                        WHEN ST_Intersects(p.geom, property.geom) THEN
+                            ROUND(
+                                (
+                                    ST_Area(
+                                        ST_Transform(
+                                            ST_Intersection(p.geom, property.geom),
+                                            4326
+                                        )::geography
+                                    ) / 10000
+                                )::numeric,
+                                2
+                            )
+                    END AS overlap_area
                 FROM prodes p
                 CROSS JOIN property
                 WHERE ST_DWithin(

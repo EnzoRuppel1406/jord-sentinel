@@ -17,9 +17,9 @@ const Search = () => {
     const registerSearch = async (carData) => {
         try {
             await api.post('/analyses', {
-                carCode: carData.code,
-                status: carData.status,
-                restrictions: carData.restrictions ?? [],
+                carCode: carData.property.code,
+                status: carData.property.status,
+                restrictions: carData.property.restrictions ?? [],
             })
         } catch (error) {
             console.error('Status:', error.response?.status)
@@ -52,6 +52,36 @@ const Search = () => {
             setIsSearching(false)
         }
     }
+
+    const sourceLabels = {
+        ibama: 'Embargo Ibama',
+        cnuc: 'Unidade de Conservação',
+        funai: 'Terra Indígena',
+        cnfp: 'Floresta Pública',
+        prodes: 'PRODES',
+    }
+
+    const allRestrictions = Object.entries(car?.restrictions ?? {}).flatMap(([source, features]) =>
+        Array.isArray(features)
+            ? features.map((feature) => ({
+                  ...feature,
+                  source: feature.source ?? source,
+                  type: sourceLabels[source] ?? source,
+                  classification:
+                      feature.class_name ?? feature.main_class ?? feature.tipo ?? feature.fase_ti,
+                  description:
+                      feature.des_tad ??
+                      feature.nome_uc ??
+                      feature.terrai_nom ??
+                      feature.nome ??
+                      [feature.biome, feature.year].filter(Boolean).join(' — '),
+              }))
+            : []
+    )
+
+    const overlappingRestrictions = allRestrictions.filter(
+        (restriction) => restriction.overlaps_property === true
+    )
 
     return (
         <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
@@ -103,11 +133,11 @@ const Search = () => {
                                     <h1 className="flex w-full justify-between p-3">
                                         Imovel Rural
                                         <span className="rounded-1 bg-lime-100 p-1 font-medium text-green-950 uppercase">
-                                            {car.status === 'AT'
+                                            {car.property.status === 'AT'
                                                 ? 'Ativo'
-                                                : car.status === 'PE'
+                                                : car.property.status === 'PE'
                                                   ? 'Pendente'
-                                                  : car.status === 'CA'
+                                                  : car.property.status === 'CA'
                                                     ? 'Cancelado'
                                                     : ''}
                                         </span>
@@ -116,33 +146,30 @@ const Search = () => {
                                         <h1>CAR</h1>
                                         <h1>Area (ha)</h1>
                                         <h1>Mod. Fiscais</h1>
-                                        <p>{car.code}</p>
-                                        <p>{parseInt(car.area)}</p>
-                                        <p>{parseInt(car.fiscalModules)}</p>
+                                        <p>{car.property.code}</p>
+                                        <p>{parseFloat(car.property.area).toFixed(2)}</p>
+                                        <p>{parseFloat(car.property.fiscalModules).toFixed(2)}</p>
                                         <h1>Data Criacao</h1>
                                         <h1>Ultima Retificacao</h1>
                                         <h1>Municipio</h1>
-                                        <p>{car.createdAt}</p>
-                                        <p>{car.rectifiedAt}</p>
-                                        <p>{`${car.city} / ${car.state}`}</p>
+                                        <p>{car.property.createdAt}</p>
+                                        <p>{car.property.rectifiedAt}</p>
+                                        <p>{`${car.property.city} / ${car.property.state}`}</p>
                                     </section>
                                     <section className="flex h-fit w-full flex-col gap-2">
                                         <p className="font-semibold tracking-wider uppercase">
                                             Restricoes encontradas
                                         </p>
 
-                                        {Array.isArray(car.restrictions) &&
-                                        car.restrictions.length > 0 ? (
-                                            car.restrictions.map((restriction, index) => (
+                                        {overlappingRestrictions.length > 0 ? (
+                                            overlappingRestrictions.map((restriction, index) => (
                                                 <RestrictionCard
-                                                    key={`${restriction.type}-${index}`}
+                                                    key={`${restriction.source}-${index}`}
                                                     type={restriction.type}
-                                                    area={restriction.area}
+                                                    area={restriction.overlap_area}
                                                     source={restriction.source}
-                                                    classification={
-                                                        restriction.details?.classification
-                                                    }
-                                                    description={restriction.details?.description}
+                                                    classification={restriction.classification}
+                                                    description={restriction.description}
                                                 />
                                             ))
                                         ) : (
@@ -181,7 +208,8 @@ const Search = () => {
                                             Coordenadas do centroide
                                         </p>
                                         <p className="font-semibold">
-                                            {car.centroid.latitude}, {car.centroid.longitude}
+                                            {car.property.centroid.latitude},{' '}
+                                            {car.property.centroid.longitude}
                                         </p>
                                     </section>
                                     <section className="flex w-1/2 cursor-pointer flex-col border-slate-950 bg-[#7fc588] p-2 hover:border-2 hover:bg-slate-200">
@@ -217,15 +245,13 @@ const Search = () => {
                     <section className="h-full w-full border-2">
                         {car ? (
                             <AnalisysMap
-                                lat={car.centroid.latitude}
-                                long={car.centroid.longitude}
-                                carGeometry={car.geometry.coordinates}
+                                lat={car.property.centroid.latitude}
+                                long={car.property.centroid.longitude}
+                                carGeometry={car.property.geometry.coordinates}
                                 restrictionGeometry={
-                                    car.restrictions?.[0]?.geometry?.coordinates ?? null
+                                    car.restrictions?.geometry?.coordinates ?? null
                                 }
-                                restrictions={
-                                    Array.isArray(car.restrictions) ? car.restrictions : []
-                                }
+                                restrictions={allRestrictions}
                                 searchTrigger={searchCount}
                             />
                         ) : (
