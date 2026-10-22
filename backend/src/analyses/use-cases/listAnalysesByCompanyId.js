@@ -18,7 +18,16 @@ export class ListAnalysesByCompanyIdUseCase {
 
         const analysesList = await Promise.all(
             analyses.map(async (analysis) => {
-                const { id, user_id, analysis_status, car_code, created_at } = analysis
+                const {
+                    id,
+                    user_id,
+                    property_city,
+                    property_state,
+                    property_area,
+                    analysis_status,
+                    car_code,
+                    created_at,
+                } = analysis
 
                 const user = await postgresUserRepository.getById(user_id)
 
@@ -27,6 +36,9 @@ export class ListAnalysesByCompanyIdUseCase {
                 return {
                     key: id,
                     carCode: car_code,
+                    city: property_city,
+                    state: property_state,
+                    area: property_area,
                     status: analysis_status,
                     consultedBy: user.name,
                     date,

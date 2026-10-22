@@ -233,7 +233,8 @@ export class PostgresGeospatialRepository {
                 ),
 
                 prodes AS (
-                    SELECT 
+                    SELECT
+                        'PRODES' as source, 
                         'CERRADO' as biome,
                         uuid,
                         state,
@@ -245,6 +246,7 @@ export class PostgresGeospatialRepository {
                     UNION ALL
 
                     SELECT
+                        'PRODES' AS source,
                         'MATA ATLANTICA' AS biome,
                         uuid,
                         state,

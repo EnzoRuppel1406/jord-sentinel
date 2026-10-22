@@ -86,13 +86,7 @@ const History = () => {
                             </thead>
                             <tbody>
                                 {analyses.map((analysis) => {
-                                    const [car] = cars.filter(
-                                        (car) => car.code === analysis.carCode
-                                    )
-
-                                    const { area, city, state } = car.property
-
-                                    const data = { ...analysis, area, city, state }
+                                    const data =  {...analysis}
 
                                     return <AnalysisHistoryItem key={data.key} data={data} />
                                 })}

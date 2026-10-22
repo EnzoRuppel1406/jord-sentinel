@@ -16,10 +16,31 @@ const Search = () => {
 
     const registerSearch = async (carData) => {
         try {
+            const restrictions = Object.entries(carData.restrictions ?? {}).flatMap(
+                ([source, features]) =>
+                    (Array.isArray(features) ? features : [])
+                        .filter((feature) => feature.overlaps_property === true)
+                        .map((feature) => {
+                            const { geometry, ...details } = feature
+
+                            return {
+                                type: feature.source ?? source,
+                                area: feature.overlap_area,
+                                details: {
+                                    ...details,
+                                    source: feature.source ?? source,
+                                },
+                            }
+                        })
+            )
+
             await api.post('/analyses', {
                 carCode: carData.property.code,
                 status: carData.property.status,
-                restrictions: carData.property.restrictions ?? [],
+                area: carData.property.area,
+                city: carData.property.city,
+                state: carData.property.state,
+                restrictions: restrictions,
             })
         } catch (error) {
             console.error('Status:', error.response?.status)
