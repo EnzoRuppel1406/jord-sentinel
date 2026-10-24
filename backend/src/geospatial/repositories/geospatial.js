@@ -24,7 +24,7 @@ export class PostgresGeospatialRepository {
                     )
                 ) AS latitude,
                 ST_AsGeoJSON(ST_Transform(c.geom, 4326))::jsonb AS geometry
-            FROM geospatial.car_pr c
+            FROM geospatial.car c
             WHERE c.cod_imovel = $1`,
             [carCode]
         )
@@ -37,7 +37,7 @@ export class PostgresGeospatialRepository {
             `
                 WITH property AS (
                     SELECT geom
-                    FROM geospatial.car_pr c
+                    FROM geospatial.car c
                     WHERE c.cod_imovel = $1
                 )
 
@@ -84,7 +84,7 @@ export class PostgresGeospatialRepository {
             `
                 WITH property AS (
                     SELECT geom
-                    FROM geospatial.car_pr c
+                    FROM geospatial.car c
                     WHERE c.cod_imovel = $1
                 )
 
@@ -133,7 +133,7 @@ export class PostgresGeospatialRepository {
             `
                 WITH property AS (
                     SELECT geom
-                    FROM geospatial.car_pr c
+                    FROM geospatial.car c
                     WHERE c.cod_imovel = $1
                 )
 
@@ -180,7 +180,7 @@ export class PostgresGeospatialRepository {
             `
                 WITH property AS (
                     SELECT geom
-                    FROM geospatial.car_pr c
+                    FROM geospatial.car c
                     WHERE c.cod_imovel = $1
                 )
 
@@ -228,32 +228,8 @@ export class PostgresGeospatialRepository {
             `
                 WITH property AS (
                     SELECT geom
-                    FROM geospatial.car_pr c
+                    FROM geospatial.car c
                     WHERE c.cod_imovel = $1
-                ),
-
-                prodes AS (
-                    SELECT
-                        'PRODES' as source, 
-                        'CERRADO' as biome,
-                        uuid,
-                        state,
-                        image_date,
-                        year,
-                        geom
-                    FROM geospatial.prodes_cerrado
-
-                    UNION ALL
-
-                    SELECT
-                        'PRODES' AS source,
-                        'MATA ATLANTICA' AS biome,
-                        uuid,
-                        state,
-                        image_date,
-                        year,
-                        geom
-                    FROM geospatial.prodes_mata_atlantica
                 )
 
                 SELECT
@@ -278,7 +254,7 @@ export class PostgresGeospatialRepository {
                                 2
                             )
                     END AS overlap_area
-                FROM prodes p
+                FROM geospatial.prodes p
                 CROSS JOIN property
                 WHERE ST_DWithin(
                     p.geom::geography,
