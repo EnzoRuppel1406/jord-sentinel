@@ -177,7 +177,7 @@ const Search = () => {
                                         <p>{car.property.rectifiedAt}</p>
                                         <p>{`${car.property.city} / ${car.property.state}`}</p>
                                     </section>
-                                    <section className="flex h-fit w-full flex-col gap-2">
+                                    <section className="flex h-fit w-full flex-col gap-2 overflow-scroll">
                                         <p className="font-semibold tracking-wider uppercase">
                                             Restricoes encontradas
                                         </p>
