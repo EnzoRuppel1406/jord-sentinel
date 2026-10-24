@@ -6,8 +6,9 @@ import {
     GetUserByIdController,
     UpdateUserController,
     AuthenticateUserController,
+    ListUsersByCompanyIdController,
 } from '../controllers/index.js'
-import { authMiddleware } from '../../shared/middlewares/auth.js'
+import { adminAuthMiddleware, authMiddleware } from '../../shared/middlewares/auth.js'
 
 export const router = express.Router()
 
@@ -40,6 +41,7 @@ router.get('/me', authMiddleware, async (req, res) => {
         email: req.user.email,
         companyId: req.user.companyId,
         roleId: req.user.roleId,
+        isAdmin: req.user.isAdmin,
     })
 })
 
@@ -47,6 +49,14 @@ router.get('/email/:userEmail', async (req, res) => {
     const getUserByEmailController = new GetUserByEmailController()
 
     const { statusCode, body } = await getUserByEmailController.execute(req)
+
+    res.status(statusCode).send(body)
+})
+
+router.get('/admin/listUsers', authMiddleware, adminAuthMiddleware, async (req, res) => {
+    const listUsersByCompanyId = new ListUsersByCompanyIdController()
+
+    const { statusCode, body } = await listUsersByCompanyId.execute(req.user)
 
     res.status(statusCode).send(body)
 })

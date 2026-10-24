@@ -1,11 +1,18 @@
 import validator from 'validator'
 import { badRequest, notFound } from './http.js'
+import { GetRoleByIdUseCase } from '../../roles/use-cases/getRoleById.js'
 
 export const checkIfIdIsValid = (id) => validator.isUUID(id)
 
 export const checkIfPasswordIsValid = (password) => password.length > 8
 
 export const checkIfEmailIsValid = (email) => validator.isEmail(email)
+
+export const checkForAdminAccess = async (roleId) => {
+    const getRoleByIdUseCase = new GetRoleByIdUseCase()
+    const role = await getRoleByIdUseCase.execute(roleId)
+    return role.name === 'Admin'
+}
 
 export const invalidResponse = () => badRequest({ message: 'The provided id is not valid.' })
 

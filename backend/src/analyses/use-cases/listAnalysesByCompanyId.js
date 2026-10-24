@@ -1,6 +1,7 @@
 import { PostgresAnalysisRepository } from '../repositories/postgres/analysis.js'
 import { PostgresUserRepository } from '../../users/repositories/user.js'
 import { PostgresCompanyRepository } from '../../companies/repositories/postgres/company.js'
+import { CompanyNotFoundError } from '../../shared/errors/index.js'
 
 export class ListAnalysesByCompanyIdUseCase {
     async execute(companyId) {
@@ -11,7 +12,7 @@ export class ListAnalysesByCompanyIdUseCase {
         const company = await postgresCompanyRepository.getById(companyId)
 
         if (!company) {
-            throw new Error('Company not found.')
+            throw new CompanyNotFoundError()
         }
 
         const analyses = await postgresAnalysisRepository.listByCompanyId(companyId)

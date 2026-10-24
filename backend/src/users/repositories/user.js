@@ -80,4 +80,26 @@ export class PostgresUserRepository {
 
         return deletedUser[0]
     }
+
+    async listByCompanyId(companyId) {
+        const list = await PostgresClient.query(
+            `SELECT
+                u.id,
+                u.name,
+                u.email,
+                u.active,
+                c.name AS company_name,
+                r.name AS role_name,
+                r.description AS role_description
+            FROM users u
+            JOIN companies c ON
+            u.company_id = c.id
+            JOIN roles r ON
+            u.role_id = r.id
+            WHERE u.company_id = $1
+            `,
+            [companyId]
+        )
+        return list
+    }
 }
