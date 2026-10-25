@@ -34,7 +34,7 @@ const Search = () => {
                         })
             )
 
-            await api.post('/analyses', {
+            await api.post('/analyses/create', {
                 carCode: carData.property.code,
                 status: carData.property.status,
                 area: carData.property.area,

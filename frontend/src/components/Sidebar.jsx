@@ -1,12 +1,13 @@
 import SidebarItem from './SidebarItem'
 import { FileChartLine, LayoutDashboard, FolderClock, UserRoundCog } from 'lucide-react'
 import profile from '../assets/profile.jpg'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 
 const Sidebar = () => {
     const { user } = useContext(AuthContext)
+    const location = useLocation()
     return (
         <aside className="group fixed top-0 left-0 z-50 flex h-full w-16 flex-col items-center overflow-hidden bg-(--menu-color) text-(--main-bg) shadow-lg transition-all duration-300 ease-in-out hover:w-72">
             <nav className="w-full flex-1 content-center py-4 text-2xl">
@@ -15,22 +16,25 @@ const Sidebar = () => {
                         icon={<LayoutDashboard size={32} absoluteStrokeWidth={true} />}
                         to={'/dashboard'}
                         label={'Dashboard'}
-                        active={true}
+                        active={location.pathname === '/dashboard'}
                     />
                     <SidebarItem
                         icon={<FileChartLine size={32} />}
                         to={'/search'}
                         label={'Consultar'}
+                        active={location.pathname === '/search'}
                     />
                     <SidebarItem
                         icon={<FolderClock size={32} />}
                         to={'/history'}
                         label={'Historico'}
+                        active={location.pathname === '/history'}
                     />
                     <SidebarItem
                         icon={<UserRoundCog size={32} />}
                         to={'/admin'}
                         label={'Gestao de Usuarios'}
+                        active={location.pathname === '/admin'}
                     />
                 </ul>
             </nav>

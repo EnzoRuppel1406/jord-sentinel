@@ -10,22 +10,20 @@ import {
 
 export const router = express.Router()
 
-router
-    .route('/')
-    .post(async (req, res) => {
-        const createRoleController = new CreateRoleController()
+router.post('/create', async (req, res) => {
+    const createRoleController = new CreateRoleController()
 
-        const { statusCode, body } = await createRoleController.execute(req)
+    const { statusCode, body } = await createRoleController.execute(req)
 
-        res.status(statusCode).send(body)
-    })
-    .get(async (req, res) => {
-        const listRolesController = new ListRolesController()
+    res.status(statusCode).send(body)
+})
+router.get('list', async (req, res) => {
+    const listRolesController = new ListRolesController()
 
-        const { statusCode, body } = await listRolesController.execute()
+    const { statusCode, body } = await listRolesController.execute()
 
-        res.status(statusCode).send(body)
-    })
+    res.status(statusCode).send(body)
+})
 
 router
     .route('/:roleId')

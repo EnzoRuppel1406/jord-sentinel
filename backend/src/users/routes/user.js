@@ -12,7 +12,7 @@ import { adminAuthMiddleware, authMiddleware } from '../../shared/middlewares/au
 
 export const router = express.Router()
 
-router.post('/', async (req, res) => {
+router.post('/create', async (req, res) => {
     const createUserController = new CreateUserController()
 
     const { statusCode, body } = await createUserController.execute(req)

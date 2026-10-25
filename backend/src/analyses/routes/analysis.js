@@ -7,7 +7,7 @@ import {
 
 export const router = express.Router()
 
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/create', authMiddleware, async (req, res) => {
     const createAnalysisController = new CreateAnalysisController()
 
     const { statusCode, body } = await createAnalysisController.execute(req, req.user)
