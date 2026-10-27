@@ -4,7 +4,7 @@ const AnalysisHistoryItem = ({ data }) => {
     const translations = {
         free: 'Livre',
         conditional: 'Condicional',
-        restricted: 'Restrtito',
+        restricted: 'Restrito',
     }
 
     return (

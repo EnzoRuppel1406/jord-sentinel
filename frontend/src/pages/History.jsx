@@ -42,6 +42,15 @@ const History = () => {
         document.getElementById('searchbar').value = ''
     }
 
+    const hasActiveFilters = Boolean(appliedSearchTerm || statusFilter)
+
+    const emptyMessage =
+        analyses.length === 0
+            ? 'Você ainda não possui análises registradas.'
+            : hasActiveFilters
+              ? 'Nenhuma análise encontrada com os filtros selecionados. Tente ajustar ou limpar os filtros.'
+              : 'Nenhuma análise encontrada.'
+
     return (
         <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
             <Sidebar />
@@ -106,51 +115,57 @@ const History = () => {
                             )}
                         </div>
                     </section>
-                    <section className="flex h-fit max-h-5/6 w-full items-start overflow-y-auto rounded-xl border bg-olive-300 text-center">
-                        <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
-                            <thead>
-                                <tr>
-                                    <th className="sticky top-0 z-10 w-2/6 bg-olive-300 py-2">
-                                        <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                            CAR
-                                        </div>
-                                    </th>
-                                    <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                        <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                            Municipio
-                                        </div>
-                                    </th>
-                                    <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                        <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                            Area
-                                        </div>
-                                    </th>
-                                    <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                        <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                            Risco
-                                        </div>
-                                    </th>
-                                    <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                        <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                            Data
-                                        </div>
-                                    </th>
-                                    <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                        <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                            Consultado Por
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredAnalyses.map((analysis) => {
-                                    const data = { ...analysis }
+                    {filteredAnalyses.length ? (
+                        <section className="flex max-h-5/6 min-h-fit w-full items-center justify-center overflow-y-auto rounded-xl border bg-olive-300 text-center">
+                            <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
+                                <thead>
+                                    <tr>
+                                        <th className="sticky top-0 z-10 w-2/6 bg-olive-300 py-2">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                CAR
+                                            </div>
+                                        </th>
+                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                Municipio
+                                            </div>
+                                        </th>
+                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                Area
+                                            </div>
+                                        </th>
+                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                Risco
+                                            </div>
+                                        </th>
+                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                Data
+                                            </div>
+                                        </th>
+                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                Consultado Por
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredAnalyses.map((analysis) => {
+                                        const data = { ...analysis }
 
-                                    return <AnalysisHistoryItem key={data.key} data={data} />
-                                })}
-                            </tbody>
-                        </table>
-                    </section>
+                                        return <AnalysisHistoryItem key={data.key} data={data} />
+                                    })}
+                                </tbody>
+                            </table>
+                        </section>
+                    ) : (
+                        <section className="flex h-5/6 w-full items-center justify-center rounded-xl border bg-olive-300 text-center">
+                            <p className="w-full text-center">{emptyMessage}</p>
+                        </section>
+                    )}
                 </section>
             </section>
         </section>

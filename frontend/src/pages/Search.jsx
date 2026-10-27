@@ -1,6 +1,6 @@
-import { FileDown, FileUp, MapPin } from 'lucide-react'
+import { FileDown, FileUp, MapPin, MonitorX, SearchAlert, X } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import RestrictionCard from '../components/RestrictionCard'
 import AnalisysMap from '../components/AnalysisMap'
 import Map from '../components/Map'
@@ -13,6 +13,17 @@ const Search = () => {
     const [notFound, setNotFound] = useState(false)
     const [searchedCode, setSearchedCode] = useState('')
     const [isSearching, setIsSearching] = useState(false)
+    const [requestMessage, setRequestMessage] = useState(null)
+
+    useEffect(() => {
+        if (!requestMessage) return
+
+        const timeoutId = setTimeout(() => {
+            setRequestMessage(null)
+        }, 5000)
+
+        return () => clearTimeout(timeoutId)
+    }, [requestMessage])
 
     const registerSearch = async (carData) => {
         try {
@@ -43,14 +54,24 @@ const Search = () => {
                 restrictions: restrictions,
             })
         } catch (error) {
-            console.error('Status:', error.response?.status)
-            console.error('Resposta do backend:', error.response?.data)
-            console.error('Erro completo:', error)
+            console.error(error)
+            setRequestMessage({
+                type: 'warning',
+                text: 'O imóvel foi encontrado, mas não foi possível salvar a análise no histórico.',
+            })
         }
     }
 
     const handleSearch = async () => {
-        if (isSearching || !carCode.trim()) return
+        setRequestMessage(null)
+
+        if (!carCode.trim()) {
+            setRequestMessage({
+                type: 'warning',
+                text: 'Por favor insira um codigo CAR para a busca.',
+            })
+            return
+        }
 
         setIsSearching(true)
 
@@ -61,7 +82,7 @@ const Search = () => {
             if (carData) {
                 setCar(carData)
                 setNotFound(false)
-                registerSearch(carData)
+                await registerSearch(carData)
             } else {
                 setCar(null)
                 setNotFound(true)
@@ -69,6 +90,12 @@ const Search = () => {
                 setCarCode('')
             }
             setSearchCount((prev) => prev + 1)
+        } catch (error) {
+            console.error(error)
+            setRequestMessage({
+                type: 'error',
+                text: 'Não foi possível realizar a busca agora. Confira o código CAR e tente novamente.',
+            })
         } finally {
             setIsSearching(false)
         }
@@ -108,6 +135,36 @@ const Search = () => {
         <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
             <Sidebar />
             <section className="h-screen w-full p-12 pl-24">
+                {requestMessage && (
+                    <div
+                        role={requestMessage.type === 'error' ? 'alert' : 'status'}
+                        className={`fixed top-6 right-6 z-70 flex w-full max-w-sm items-start gap-3 rounded-xl border-2 ${
+                            requestMessage.type === 'warning'
+                                ? 'border-amber-300 bg-amber-50 text-amber-900 '
+                                : 'border-red-300 bg-red-50 text-red-800'
+                        } p-4 shadow-2xl`}
+                    >
+                        {requestMessage.type === 'warning' ? (
+                            <SearchAlert className="mt-0.5 shrink-0 text-amber-500" size={24} />
+                        ) : (
+                            <MonitorX className="mt-0.5 shrink-0 text-red-700" size={24} />
+                        )}
+
+                        <div className="flex-1">
+                            <p className="font-bold">Ocorreu um erro.</p>
+                            <p className="text-sm">{requestMessage.text}</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            aria-label="Fechar mensagem"
+                            className="cursor-pointer text-red-800 hover:opacity-60"
+                            onClick={() => setRequestMessage(null)}
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+                )}
                 <section className="flex h-full w-full flex-col gap-5 p-4">
                     <section className="h-fit w-full rounded-xl border border-(--menu-color) p-6">
                         <p className="font-bold tracking-wider text-(--menu-color) uppercase">
@@ -140,10 +197,10 @@ const Search = () => {
                                     'Buscar'
                                 )}
                             </button>
-                            <p className="flex w-1/6 cursor-pointer gap-4 rounded-xl border-(--menu-color) bg-(--menu-color) p-2 text-(--main-bg) transition-colors duration-300 ease-in-out hover:border-2 hover:bg-stone-500">
+                            {/* <p className="flex w-1/6 cursor-pointer gap-4 rounded-xl border-(--menu-color) bg-(--menu-color) p-2 text-(--main-bg) transition-colors duration-300 ease-in-out hover:border-2 hover:bg-stone-500">
                                 <FileUp />
                                 Carregar arquivo
-                            </p>
+                            </p> */}
                         </section>
                     </section>
 
@@ -207,7 +264,7 @@ const Search = () => {
                                         </h2>
                                         <h1 className="font-bold tracking-widest text-amber-700 uppercase">
                                             {car?.evaluation?.status
-                                                ? car.evalutaion.status
+                                                ? car.evaluation.status
                                                 : 'Inconclusivo'}
                                         </h1>
                                         <p>
