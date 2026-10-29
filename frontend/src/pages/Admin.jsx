@@ -6,12 +6,15 @@ import { CircleCheck, UserRoundPlusIcon, X } from 'lucide-react'
 import AdminUsersListItem from '../components/AdminUsersListItem'
 
 import CreateUserForm from '../components/CreateUserForm'
+import UserInfoCard from '../components/UserInfoCard'
 
 const Admin = () => {
     const { user } = useContext(AuthContext)
     const [company, setCompany] = useState('')
     const [usersList, setUsersList] = useState([])
     const [showForm, setShowForm] = useState(false)
+    const [showUserInfo, setShowUserInfo] = useState(false)
+    const [userInfo, setUserInfo] = useState({})
     const [successMessage, setSuccessMessage] = useState('')
 
     const loadUsersList = useCallback(async () => {
@@ -23,10 +26,21 @@ const Admin = () => {
         }
     }, [])
 
+    const openUserInfoCard = (user) => {
+        setUserInfo(user)
+        setShowUserInfo(true)
+    }
+
     const handleUserCreated = async () => {
         await loadUsersList()
         setShowForm(false)
         setSuccessMessage('Usuário cadastrado com sucesso.')
+    }
+
+    const handleUserUpdated = async () => {
+        await loadUsersList()
+        setShowUserInfo(false)
+        setSuccessMessage('Usuário atualizado com sucesso.')
     }
 
     useEffect(() => {
@@ -66,6 +80,17 @@ const Admin = () => {
                             onCreated={handleUserCreated}
                         />
                     )}
+                    {showUserInfo && (
+                        <UserInfoCard
+                            admin={user}
+                            user={userInfo}
+                            closeCard={() => {
+                                setShowUserInfo(false)
+                                setUserInfo({})
+                            }}
+                            onUpdated={handleUserUpdated}
+                        />
+                    )}
                     {successMessage && (
                         <div
                             role="status"
@@ -74,8 +99,8 @@ const Admin = () => {
                             <CircleCheck className="mt-0.5 shrink-0 text-emerald-700" size={24} />
 
                             <div className="flex-1">
-                                <p className="font-bold">Cadastro concluído</p>
-                                <p className="text-sm">Usuário cadastrado com sucesso.</p>
+                                <p className="font-bold">Concluído</p>
+                                <p className="text-sm">{successMessage}</p>
                             </div>
 
                             <button
@@ -106,41 +131,47 @@ const Admin = () => {
                     </section>
                     <section className="mt-10 h-full w-3/4 rounded-xl border-2 border-(--menu-color)">
                         <section className="flex h-fit max-h-5/6 w-full items-start overflow-y-auto rounded-xl border bg-olive-300 text-center">
-                            <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
-                                <thead>
-                                    <tr>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                                Nome
-                                            </div>
-                                        </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                                Email
-                                            </div>
-                                        </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                                Funcao
-                                            </div>
-                                        </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
-                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
-                                                Status
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {usersList.length
-                                        ? usersList.map((user) => {
-                                              return (
-                                                  <AdminUsersListItem key={user.key} user={user} />
-                                              )
-                                          })
-                                        : 'Nenhum usuario cadastrado'}
-                                </tbody>
-                            </table>
+                            {usersList.length ? (
+                                <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
+                                    <thead>
+                                        <tr>
+                                            <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                                <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                    Nome
+                                                </div>
+                                            </th>
+                                            <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                                <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                    Email
+                                                </div>
+                                            </th>
+                                            <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                                <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                    Funcao
+                                                </div>
+                                            </th>
+                                            <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                                <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                    Status
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {usersList.map((user) => {
+                                            return (
+                                                <AdminUsersListItem
+                                                    key={user.key}
+                                                    user={user}
+                                                    onClick={() => openUserInfoCard(user)}
+                                                />
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <p>Nenhum usuario cadastrado</p>
+                            )}
                         </section>
                     </section>
                 </section>

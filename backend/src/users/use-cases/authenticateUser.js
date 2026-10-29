@@ -11,13 +11,13 @@ export class AuthenticateUserUseCase {
         const user = await postgresUserRepository.getByEmail(email)
 
         if (!user) {
-            throw new InvalidCredentialsError()
+            throw new InvalidCredentialsError('Invalid email or password.')
         }
 
         const passwordMatches = await bcrypt.compare(password, user.password)
 
         if (!passwordMatches) {
-            throw new InvalidCredentialsError()
+            throw new InvalidCredentialsError('Invalid email or password.')
         }
 
         const userIsAdmin = await checkForAdminAccess(user.role_id)

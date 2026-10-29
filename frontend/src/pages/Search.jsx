@@ -134,7 +134,7 @@ const Search = () => {
     return (
         <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
             <Sidebar />
-            <section className="h-screen w-full p-12 pl-24">
+            <section className="min-h-screen w-full p-12 pl-24">
                 {requestMessage && (
                     <div
                         role={requestMessage.type === 'error' ? 'alert' : 'status'}
@@ -187,11 +187,15 @@ const Search = () => {
                                 className="w-1/6 cursor-pointer rounded-xl border-(--menu-color) bg-(--menu-color) p-2 text-(--main-bg) transition-colors duration-300 ease-in-out hover:border-2 hover:bg-stone-500"
                             >
                                 {isSearching ? (
-                                    <span className="inline-flex items-center justify-center gap-2">
-                                        <span
-                                            className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-                                            aria-hidden="true"
-                                        ></span>
+                                    <span className="inline-flex items-center gap-1">
+                                        Buscando imovel
+                                        <span className="animate-bounce">.</span>
+                                        <span className="animate-bounce [animation-delay:200ms]">
+                                            .
+                                        </span>
+                                        <span className="animate-bounce [animation-delay:400ms]">
+                                            .
+                                        </span>
                                     </span>
                                 ) : (
                                     'Buscar'

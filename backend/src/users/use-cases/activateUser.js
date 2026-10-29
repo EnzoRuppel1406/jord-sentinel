@@ -1,11 +1,11 @@
 import { PostgresUserRepository } from '../repositories/user.js'
 
-export class DeleteUserUseCase {
+export class ActivateteUserUseCase {
     async execute(userId) {
         const postgresUserRepository = new PostgresUserRepository()
 
-        const deletedUser = await postgresUserRepository.delete(userId)
+        const activatedUser = await postgresUserRepository.activate(userId)
 
-        return deletedUser
+        return activatedUser
     }
 }

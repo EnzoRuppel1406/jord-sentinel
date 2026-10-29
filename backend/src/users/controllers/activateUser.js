@@ -5,9 +5,9 @@ import {
     userNotFoundResponse,
     serverError,
 } from '../../shared/helpers/index.js'
-import { DeleteUserUseCase } from '../use-cases/index.js'
+import { ActivateteUserUseCase } from '../use-cases/index.js'
 
-export class DeleteUserController {
+export class ActivateUserController {
     async execute(httpRequest) {
         try {
             const userId = httpRequest.params.userId
@@ -18,15 +18,15 @@ export class DeleteUserController {
                 return invalidResponse()
             }
 
-            const deleteUserUseCase = new DeleteUserUseCase()
+            const activateUserUseCase = new ActivateteUserUseCase()
 
-            const deletedUser = await deleteUserUseCase.execute(userId)
+            const activatedUser = await activateUserUseCase.execute(userId)
 
-            if (!deletedUser) {
+            if (!activatedUser) {
                 return userNotFoundResponse()
             }
 
-            return ok(deletedUser)
+            return ok(activatedUser)
         } catch (error) {
             console.log(error)
             return serverError()

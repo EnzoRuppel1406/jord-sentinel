@@ -1,18 +1,20 @@
 import express from 'express'
 import {
     CreateUserController,
-    DeleteUserController,
+    DeactivateUserController,
     GetUserByEmailController,
     GetUserByIdController,
     UpdateUserController,
     AuthenticateUserController,
     ListUsersByCompanyIdController,
+    ActivateUserController,
+    ReauthenticateUserController,
 } from '../controllers/index.js'
 import { adminAuthMiddleware, authMiddleware } from '../../shared/middlewares/auth.js'
 
 export const router = express.Router()
 
-router.post('/create', async (req, res) => {
+router.post('/create', authMiddleware, adminAuthMiddleware, async (req, res) => {
     const createUserController = new CreateUserController()
 
     const { statusCode, body } = await createUserController.execute(req)
@@ -33,6 +35,19 @@ router.post('/login', async (req, res) => {
 
     res.status(statusCode).send(body)
 })
+
+router.post(
+    '/admin/validate-credentials',
+    authMiddleware,
+    adminAuthMiddleware,
+    async (req, res) => {
+        const reauthenticateUserController = new ReauthenticateUserController()
+
+        const { statusCode, body } = await reauthenticateUserController.execute(req)
+
+        res.status(statusCode).send(body)
+    }
+)
 
 router.get('/me', authMiddleware, async (req, res) => {
     res.send({
@@ -61,26 +76,39 @@ router.get('/admin/listUsers', authMiddleware, adminAuthMiddleware, async (req, 
     res.status(statusCode).send(body)
 })
 
-router
-    .route('/:userId')
-    .get(async (req, res) => {
-        const getUserByIdController = new GetUserByIdController()
+router.put('/admin/update/:userId', authMiddleware, adminAuthMiddleware, async (req, res) => {
+    const updateUserController = new UpdateUserController()
 
-        const { statusCode, body } = await getUserByIdController.execute(req)
+    const { statusCode, body } = await updateUserController.execute(req)
 
-        res.status(statusCode).send(body)
-    })
-    .put(async (req, res) => {
-        const updateUserController = new UpdateUserController()
+    res.status(statusCode).send(body)
+})
 
-        const { statusCode, body } = await updateUserController.execute(req)
+router.delete(
+    '/admin/deactivate/:userId',
+    authMiddleware,
+    adminAuthMiddleware,
+    async (req, res) => {
+        const deactivateUserController = new DeactivateUserController()
 
-        res.status(statusCode).send(body)
-    })
-    .delete(async (req, res) => {
-        const deleteUserController = new DeleteUserController()
-
-        const { statusCode, body } = await deleteUserController.execute(req)
+        const { statusCode, body } = await deactivateUserController.execute(req)
 
         res.status(statusCode).send(body)
-    })
+    }
+)
+
+router.put('/admin/activate/:userId', authMiddleware, adminAuthMiddleware, async (req, res) => {
+    const activateUserController = new ActivateUserController()
+
+    const { statusCode, body } = await activateUserController.execute(req)
+
+    res.status(statusCode).send(body)
+})
+
+router.get('/:userId', async (req, res) => {
+    const getUserByIdController = new GetUserByIdController()
+
+    const { statusCode, body } = await getUserByIdController.execute(req)
+
+    res.status(statusCode).send(body)
+})

@@ -67,8 +67,8 @@ export class PostgresUserRepository {
         return updatedUser[0]
     }
 
-    async delete(userId) {
-        const deletedUser = await PostgresClient.query(
+    async deactivate(userId) {
+        const deactivatedUser = await PostgresClient.query(
             `
             UPDATE users
             SET active = false, updated_at = NOW(), deleted_at = NOW()
@@ -78,7 +78,21 @@ export class PostgresUserRepository {
             [userId]
         )
 
-        return deletedUser[0]
+        return deactivatedUser[0]
+    }
+
+    async activate(userId) {
+        const activatedUser = await PostgresClient.query(
+            `
+            UPDATE users
+            SET active = true, updated_at = NOW(), deleted_at = NOW()
+            WHERE id = $1
+            RETURNING *
+            `,
+            [userId]
+        )
+
+        return activatedUser[0]
     }
 
     async listByCompanyId(companyId) {

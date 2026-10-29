@@ -10,6 +10,8 @@ const History = () => {
     const [appliedSearchTerm, setAppliedSearchTerm] = useState('')
     const [statusFilter, setStatusFilter] = useState('')
     const [showFilters, setShowFilters] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const [loadError, setLoadError] = useState('')
 
     useEffect(() => {
         const loadAnalyses = async () => {
@@ -17,8 +19,12 @@ const History = () => {
                 const { data } = await api.get('/analyses/list')
 
                 setanalyses(data)
+                setLoadError('')
             } catch (error) {
                 console.log(`Erro ao buscar dados ${error}`)
+                setLoadError('Não foi possível carregar o histórico. Tente novamente mais tarde.')
+            } finally {
+                setIsLoading(false)
             }
         }
 
@@ -115,7 +121,20 @@ const History = () => {
                             )}
                         </div>
                     </section>
-                    {filteredAnalyses.length ? (
+                    {isLoading ? (
+                        <section className="flex h-5/6 w-full items-center justify-center rounded-xl border bg-olive-300 text-center">
+                            <span className="inline-flex items-center gap-1">
+                                Carregando análises
+                                <span className="animate-bounce">.</span>
+                                <span className="animate-bounce [animation-delay:200ms]">.</span>
+                                <span className="animate-bounce [animation-delay:400ms]">.</span>
+                            </span>
+                        </section>
+                    ) : loadError ? (
+                        <section className="flex h-5/6 w-full items-center justify-center rounded-xl border bg-olive-300 text-center">
+                            <p className="w-full text-center">{loadError}</p>
+                        </section>
+                    ) : filteredAnalyses.length ? (
                         <section className="flex max-h-5/6 min-h-fit w-full items-center justify-center overflow-y-auto rounded-xl border bg-olive-300 text-center">
                             <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
                                 <thead>

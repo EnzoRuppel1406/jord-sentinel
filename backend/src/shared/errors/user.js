@@ -6,8 +6,8 @@ export class EmailAlreadyInUseError extends Error {
 }
 
 export class InvalidCredentialsError extends Error {
-    constructor() {
-        super('Invalid email or password.')
+    constructor(errorMessage) {
+        super(errorMessage)
         this.name = 'InvalidCredentialsError'
     }
 }
