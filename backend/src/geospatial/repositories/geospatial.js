@@ -233,6 +233,7 @@ export class PostgresGeospatialRepository {
                 )
 
                 SELECT
+                    'PRODES' as source,
                     p.uuid,
                     p.biome,
                     p.state,
