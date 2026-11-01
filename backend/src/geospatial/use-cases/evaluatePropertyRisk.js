@@ -5,6 +5,13 @@ export class EvaluatePropertyRiskUseCase {
 
         if (property.status === 'CA' || property.status === 'SU') {
             score = score + 80
+            assessments.push({
+                restrictionType: 'car_status',
+                score: 80,
+                level: 'high',
+                description: 'Cadastro do CAR encontra-se Cancelado ou Suspenso',
+                legalReference: 'MCR-2-9-3',
+            })
         }
 
         const overlappingRestrictions = Object.entries(restrictions).flatMap(
@@ -28,7 +35,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'ibama',
                                 score: 90,
-                                level: 'alto',
+                                level: 'high',
                                 description:
                                     'Sobreposição com Embargo classificado pelo Ibama como relacionado a desmatamento ou queimada.',
                                 legalReference: 'MCR-2-9-10',
@@ -39,7 +46,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'ibama',
                                 score: 45,
-                                level: 'moderado',
+                                level: 'moderate',
                                 description:
                                     'Sobreposição com embargo do Ibama do Tipo N. O código N não atende ao critério específico de uso econômico de área desmatada ilegalmente do MCR 2-9-10.',
                                 legalReference: 'MCR-2-9-10',
@@ -50,7 +57,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'ibama',
                                 score: 90,
-                                level: 'alto',
+                                level: 'high',
                                 description:
                                     'Código de situação do embargo ausente ou desconhecido.',
                                 legalReference: 'MCR 2-9-10',
@@ -65,7 +72,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'cnuc',
                                 score: 40,
-                                level: 'moderado',
+                                level: 'moderate',
                                 description:
                                     'Sobreposição com Unidade de Conservação que possui Plano de Manejo. Deve-se estar em conformidade da atividade com o plano de manejo.',
                                 legalReference: 'MCR-2-9-5 e MCR-2-9-6',
@@ -76,7 +83,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'cnuc',
                                 score: 70,
-                                level: 'alto',
+                                level: 'high',
                                 description:
                                     'Sobreposição com Unidade de Conservação sem Plano de Manejo informado. Condições especiais podem se aplicar a UC.',
                                 legalReference: 'MCR-2-9-5, MCR-2-9-5-A e MCR-2-9-6',
@@ -93,7 +100,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'funai',
                                 score: 80,
-                                level: 'alto',
+                                level: 'high',
                                 description:
                                     'Sobreposição com terra indígena em fase abrangida pelo critério do MCR.',
                                 legalReference: 'MCR-2-9-7',
@@ -104,7 +111,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'funai',
                                 score: 20,
-                                level: 'baixo',
+                                level: 'low',
                                 description:
                                     'Sobreposição com terra indígena em fase que não corresponde às situações pontuadas para este critério no MCR.',
                                 legalReference: 'MCR-2-9-7',
@@ -118,7 +125,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'cnfp',
                                 score: 0,
-                                level: 'baixo',
+                                level: 'low',
                                 description:
                                     'A área sobreposta não é Floresta Pública Tipo B, que é o tipo abrangido pelo critério considerado no MCR.',
                                 legalReference: 'MCR 2-9-14 e 15',
@@ -129,7 +136,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'cnfp',
                                 score: 60,
-                                level: 'moderado',
+                                level: 'moderate',
                                 description:
                                     'Sobreposição com Floresta Pública Tipo B. O imóvel tem mais de 15 módulos fiscais',
                                 legalReference: 'MCR 2-9-14 e 15',
@@ -140,7 +147,7 @@ export class EvaluatePropertyRiskUseCase {
                             assessments.push({
                                 restrictionType: 'cnfp',
                                 score: 20,
-                                level: 'baixo',
+                                level: 'low',
                                 description:
                                     'Sobreposição com Floresta Pública Tipo B. O imóvel tem até 15 módulos fiscais',
                                 legalReference: 'MCR 2-9-14 e 15',
@@ -153,10 +160,10 @@ export class EvaluatePropertyRiskUseCase {
                         assessments.push({
                             restrictionType: 'prodes',
                             score: 0,
-                            level: 'baixo',
+                            level: 'low',
                             description:
                                 'Supressão detectada pela base PRODES após 31 de julho de 2019. O início da verificação para fins do MCR depende da faixa de módulos fiscais e do cronograma aplicável.',
-                            legalReference: 'MCR 2-9-17 e 18',
+                            legalReference: 'MCR 2-9-17 e MCR 2-9-18',
                             imageDate: finding.image_date,
                             overlapArea: finding.overlap_area,
                         })
@@ -165,7 +172,7 @@ export class EvaluatePropertyRiskUseCase {
             }
         }
 
-        const riskLevel = score < 20 ? 'Baixo' : score < 50 ? 'Moderado' : 'Alto'
+        const riskLevel = score < 20 ? 'low' : score < 50 ? 'moderate' : 'high'
 
         return { score, riskLevel, assessments }
     }

@@ -36,7 +36,7 @@ const History = () => {
             .toLowerCase()
             .includes(appliedSearchTerm.toLowerCase())
 
-        const matchStatuses = statusFilter === '' || analysis.status === statusFilter
+        const matchStatuses = statusFilter === '' || analysis.riskLevel === statusFilter
 
         return matchesSearch && matchStatuses
     })
@@ -60,8 +60,8 @@ const History = () => {
     return (
         <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
             <Sidebar />
-            <section className="flex h-screen w-full items-center justify-center p-30 text-2xl">
-                <section className="h-full w-full rounded-xl border-2 border-(--menu-color) p-8">
+            <section className="flex h-screen w-full items-center justify-center overflow-y-auto py-30 pr-10 pl-30 text-2xl">
+                <section className="h-full w-10/10 rounded-xl border-2 border-(--menu-color) p-8">
                     <section className="flex h-1/6 w-full items-center gap-2 p-4">
                         <input
                             type="text"
@@ -101,9 +101,9 @@ const History = () => {
                                 <div className="absolute top-full left-0 z-20 w-full overflow-hidden rounded-b-2xl border-2 border-t-0 border-(--menu-color) bg-(--menu-color) text-(--main-bg) shadow-lg">
                                     {[
                                         { value: '', label: 'Todos os riscos' },
-                                        { value: 'free', label: 'Livre' },
-                                        { value: 'conditional', label: 'Condicional' },
-                                        { value: 'restricted', label: 'Restrito' },
+                                        { value: 'low', label: 'Baixo' },
+                                        { value: 'moderate', label: 'Moderado' },
+                                        { value: 'high', label: 'Alto' },
                                     ].map((option) => (
                                         <button
                                             key={option.value || 'all'}
@@ -135,36 +135,41 @@ const History = () => {
                             <p className="w-full text-center">{loadError}</p>
                         </section>
                     ) : filteredAnalyses.length ? (
-                        <section className="flex max-h-5/6 min-h-fit w-full items-center justify-center overflow-y-auto rounded-xl border bg-olive-300 text-center">
+                        <section className="flex max-h-5/6 w-full items-center justify-center overflow-y-auto rounded-xl border bg-olive-300 text-center">
                             <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
                                 <thead>
                                     <tr>
-                                        <th className="sticky top-0 z-10 w-2/6 bg-olive-300 py-2">
+                                        <th className="sticky top-0 z-10 w-3/8 bg-olive-300 py-2">
                                             <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
                                                 CAR
                                             </div>
                                         </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                        <th className="sticky top-0 z-10 w-1/8 bg-olive-300 px-4">
+                                            <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
+                                                Situação
+                                            </div>
+                                        </th>
+                                        <th className="sticky top-0 z-10 w-2/8 bg-olive-300 px-4">
                                             <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
                                                 Municipio
                                             </div>
                                         </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                        <th className="sticky top-0 z-10 w-1/8 bg-olive-300 px-4">
                                             <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
                                                 Area
                                             </div>
                                         </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                        <th className="sticky top-0 z-10 w-1/8 bg-olive-300 px-4">
                                             <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
                                                 Risco
                                             </div>
                                         </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                        <th className="sticky top-0 z-10 w-1/8 bg-olive-300 px-4">
                                             <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
                                                 Data
                                             </div>
                                         </th>
-                                        <th className="sticky top-0 z-10 bg-olive-300 px-4">
+                                        <th className="sticky top-0 z-10 w-1/8 bg-olive-300 px-4">
                                             <div className="rounded-2xl border-2 border-stone-400 bg-white py-2 shadow-md">
                                                 Consultado Por
                                             </div>

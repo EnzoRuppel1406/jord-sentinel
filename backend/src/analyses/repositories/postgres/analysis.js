@@ -8,7 +8,17 @@ export class PostgresAnalysisRepository {
             await client.query('BEGIN')
 
             await client.query(
-                'INSERT INTO analyses (id, company_id, user_id, analysis_status, car_code, property_area, property_city, property_state) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);',
+                `INSERT INTO analyses (
+                id,
+                company_id,
+                user_id,
+                car_status,
+                car_code,
+                property_area,
+                property_city,
+                property_state,
+                risk_score,
+                risk_level) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`,
                 [
                     createAnalysisParams.id,
                     createAnalysisParams.companyId,
@@ -18,6 +28,8 @@ export class PostgresAnalysisRepository {
                     createAnalysisParams.area,
                     createAnalysisParams.city,
                     createAnalysisParams.state,
+                    createAnalysisParams.riskScore,
+                    createAnalysisParams.riskLevel,
                 ]
             )
 
@@ -45,7 +57,23 @@ export class PostgresAnalysisRepository {
         }
 
         const analysis = await PostgresClient.query(
-            'SELECT * FROM analyses a LEFT JOIN analyses_findings f on a.id = f.analysis_id WHERE a.id = $1',
+            `SELECT 
+                a.id AS analysis_id,
+                a.company_id,
+                a.user_id,
+                a.car_status,
+                a.car_code,
+                a.property_area,
+                a.property_city,
+                a.property_state,
+                a.risk_score,
+                a.risk_level,
+                a.created_at,
+                f.id AS finding_id,
+                f.restriction_type,
+                f.overlay_area,
+                f.details
+            FROM analyses a LEFT JOIN analyses_findings f on a.id = f.analysis_id WHERE a.id = $1`,
             [createAnalysisParams.id]
         )
 
@@ -54,7 +82,18 @@ export class PostgresAnalysisRepository {
 
     async listByCompanyId(companyId) {
         const analysesList = await PostgresClient.query(
-            'SELECT id, user_id, analysis_status, car_code, property_city, property_state, property_area, created_at FROM analyses WHERE company_id = $1',
+            `SELECT 
+                id,
+                user_id,
+                car_status,
+                car_code,
+                property_city,
+                property_state,
+                property_area,
+                risk_score,
+                risk_level,
+                created_at
+            FROM analyses WHERE company_id = $1`,
             [companyId]
         )
 

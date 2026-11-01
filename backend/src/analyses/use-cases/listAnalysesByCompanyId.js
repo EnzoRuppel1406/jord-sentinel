@@ -25,8 +25,10 @@ export class ListAnalysesByCompanyIdUseCase {
                     property_city,
                     property_state,
                     property_area,
-                    analysis_status,
+                    car_status,
                     car_code,
+                    risk_score,
+                    risk_level,
                     created_at,
                 } = analysis
 
@@ -40,7 +42,9 @@ export class ListAnalysesByCompanyIdUseCase {
                     city: property_city,
                     state: property_state,
                     area: property_area,
-                    status: analysis_status,
+                    propertyStatus: car_status,
+                    riskScore: risk_score,
+                    riskLevel: risk_level,
                     consultedBy: user.name,
                     date,
                 }

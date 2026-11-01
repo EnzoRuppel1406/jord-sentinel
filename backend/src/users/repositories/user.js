@@ -85,7 +85,7 @@ export class PostgresUserRepository {
         const activatedUser = await PostgresClient.query(
             `
             UPDATE users
-            SET active = true, updated_at = NOW(), deleted_at = NOW()
+            SET active = true, updated_at = NOW(), deleted_at = NULL
             WHERE id = $1
             RETURNING *
             `,

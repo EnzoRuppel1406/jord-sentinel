@@ -1,4 +1,4 @@
-import { FileDown, FileUp, MapPin, MonitorX, SearchAlert, X } from 'lucide-react'
+import { FileDown, MapPin, MonitorX, SearchAlert, X } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import { useEffect, useState } from 'react'
 import RestrictionCard from '../components/RestrictionCard'
@@ -52,6 +52,8 @@ const Search = () => {
                 city: carData.property.city,
                 state: carData.property.state,
                 restrictions: restrictions,
+                riskScore: carData.risk.score,
+                riskLevel: carData.risk.riskLevel,
             })
         } catch (error) {
             console.error(error)
@@ -109,6 +111,12 @@ const Search = () => {
         prodes: 'PRODES',
     }
 
+    const translations = {
+        low: 'Baixo',
+        moderate: 'Moderado',
+        high: 'Alto',
+    }
+
     const allRestrictions = Object.entries(car?.restrictions ?? {}).flatMap(([source, features]) =>
         Array.isArray(features)
             ? features.map((feature) => ({
@@ -127,12 +135,24 @@ const Search = () => {
             : []
     )
 
-    const overlappingRestrictions = allRestrictions.filter(
-        (restriction) => restriction.overlaps_property === true
-    )
+    const overlappingRestrictions = car?.risk?.assessments ?? []
 
+    const legalReferences = () => {
+        const references = []
+        if (car?.risk?.assessments.length !== 0) {
+            car.risk.assessments.map((assessment) => {
+                if (references.includes(assessment.legalReference)) {
+                    return
+                }
+                references.push(assessment.legalReference)
+            })
+
+            return references.join(',')
+        }
+        return 'Consulte o MCR para saber mais'
+    }
     return (
-        <section className="flex min-h-screen w-full justify-center bg-(--main-bg) font-sans">
+        <section className="flex min-h-screen w-full justify-center overflow-y-auto bg-(--main-bg) font-sans">
             <Sidebar />
             <section className="min-h-screen w-full p-12 pl-24">
                 {requestMessage && (
@@ -201,10 +221,6 @@ const Search = () => {
                                     'Buscar'
                                 )}
                             </button>
-                            {/* <p className="flex w-1/6 cursor-pointer gap-4 rounded-xl border-(--menu-color) bg-(--menu-color) p-2 text-(--main-bg) transition-colors duration-300 ease-in-out hover:border-2 hover:bg-stone-500">
-                                <FileUp />
-                                Carregar arquivo
-                            </p> */}
                         </section>
                     </section>
 
@@ -238,48 +254,53 @@ const Search = () => {
                                         <p>{car.property.rectifiedAt}</p>
                                         <p>{`${car.property.city} / ${car.property.state}`}</p>
                                     </section>
-                                    <section className="flex h-fit w-full flex-col gap-2 overflow-scroll">
+                                    <section className="flex h-fit w-full flex-col gap-2">
                                         <p className="font-semibold tracking-wider uppercase">
                                             Restricoes encontradas
                                         </p>
 
-                                        {overlappingRestrictions.length > 0 ? (
-                                            overlappingRestrictions.map((restriction, index) => (
-                                                <RestrictionCard
-                                                    key={`${restriction.source}-${index}`}
-                                                    type={restriction.type}
-                                                    area={restriction.overlap_area}
-                                                    source={restriction.source}
-                                                    classification={restriction.classification}
-                                                    description={restriction.description}
-                                                />
-                                            ))
-                                        ) : (
-                                            <p className="rounded-lg bg-slate-100 p-4 text-sm text-slate-600">
-                                                Nenhuma restrição encontrada para este imóvel.
-                                            </p>
-                                        )}
+                                        <section className="flex max-h-52 flex-col gap-3 overflow-y-auto">
+                                            {overlappingRestrictions.length > 0 ? (
+                                                overlappingRestrictions.map(
+                                                    (restriction, index) => (
+                                                        <RestrictionCard
+                                                            key={`${restriction.restrictionType}-${index}`}
+                                                            type={restriction.restrictionType}
+                                                            area={restriction.overlapArea}
+                                                            source={restriction.restrictionType}
+
+                                                            description={restriction.description}
+                                                            score={restriction.score}
+                                                            riskLevel={restriction.level}
+                                                        />
+                                                    )
+                                                )
+                                            ) : (
+                                                <p className="rounded-lg bg-slate-100 p-4 text-sm text-slate-600">
+                                                    Nenhuma restrição encontrada para este imóvel.
+                                                </p>
+                                            )}
+                                        </section>
                                     </section>
                                 </section>
                                 <section className="flex h-full w-1/2 flex-col gap-4 p-4">
-                                    <section className="h-fit w-1/2 bg-[#7fc588] p-2">
-                                        <h2 className="font-light uppercase">
-                                            Parecer consolidado
-                                        </h2>
-                                        <h1 className="font-bold tracking-widest text-amber-700 uppercase">
-                                            {car?.evaluation?.status
-                                                ? car.evaluation.status
-                                                : 'Inconclusivo'}
+                                    <section className="border(-0menu-color) h-fit w-1/2 rounded border bg-(--main-bg) p-2">
+                                        <h2 className="font-bold uppercase">Parecer consolidado</h2>
+                                        <h1
+                                            className={`tracking-wides w-fit rounded p-1 font-semibold uppercase ${car?.risk?.riskLevel === 'low' ? 'bg-green-300/50 text-green-700' : car?.risk?.riskLevel === 'moderate' ? 'bg-amber-300/50 text-amber-700' : car?.risk?.riskLevel === 'high' ? 'bg-red-300/50 text-red-700' : 'bg-gray-300/50 text-gray-700'}`}
+                                        >
+                                            {`Risco ${car?.risk?.riskLevel ? translations[car.risk.riskLevel] : 'Inconclusivo'}`}
                                         </h1>
                                         <p>
-                                            {car?.evaluation?.description
-                                                ? car.evaluation.description
-                                                : 'Sem informacao'}
+                                            Pontuacao de risco:{' '}
+                                            <span className="font-semibold">
+                                                {car?.risk?.score >= 0
+                                                    ? car.risk.score
+                                                    : 'Sem informacao'}
+                                            </span>
                                         </p>
                                         <p className="w-fit border border-amber-600 bg-orange-200 p-1 font-medium tracking-wide">
-                                            {car?.evaluation?.reference
-                                                ? car.evaluation.reference
-                                                : 'Consulte o MCR para saber mais'}
+                                            {legalReferences()}
                                         </p>
                                     </section>
                                     <section className="flex w-1/2 flex-col bg-[#7fc588] p-2">

@@ -28,7 +28,11 @@ export class CreateAnalysisController {
 
                 for (const restriction of restrictions) {
                     for (const field of restrictionsRequiredFields) {
-                        if (!restriction[field]) {
+                        if (
+                            restriction[field] === null ||
+                            restriction[field] === undefined ||
+                            restriction[field] === ''
+                        ) {
                             return badRequest({ message: `Missing param ${field}.` })
                         }
                     }
@@ -37,10 +41,20 @@ export class CreateAnalysisController {
 
             const params = { ...createAnalysisParams, userId, companyId }
 
-            const analysisRequiredFields = ['userId', 'companyId', 'status', 'carCode']
+            const analysisRequiredFields = [
+                'userId',
+                'companyId',
+                'status',
+                'carCode',
+                'area',
+                'city',
+                'state',
+                'riskScore',
+                'riskLevel',
+            ]
 
             for (const field of analysisRequiredFields) {
-                if (!params[field]) {
+                if (params[field] === null || params[field] === undefined || params[field] === '') {
                     return badRequest({ message: `Missing param ${field}.` })
                 }
             }

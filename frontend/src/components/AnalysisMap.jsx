@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css'
 import AutoFitBounds from '../hooks/AutoFitBounds'
 import { useMemo } from 'react'
 import MapLegend from './MapLegend'
+import MapFullScreenControl from './MapFullscreenControl'
 
 const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger }) => {
     const fixPolygons = (geometry) => {
@@ -82,6 +83,7 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger 
             ))}
 
             <MapLegend />
+            <MapFullScreenControl />
         </MapContainer>
     )
 }
