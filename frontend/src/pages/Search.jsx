@@ -5,6 +5,7 @@ import RestrictionCard from '../components/RestrictionCard'
 import AnalisysMap from '../components/AnalysisMap'
 import Map from '../components/Map'
 import { api } from '../services/api'
+import AnalysisReport from '../components/AnalysisReport'
 
 const Search = () => {
     const [carCode, setCarCode] = useState('')
@@ -185,7 +186,7 @@ const Search = () => {
                         </button>
                     </div>
                 )}
-                <section className="flex h-full w-full flex-col gap-5 p-4">
+                <section className="flex h-full w-full flex-col gap-5 p-4 print:hidden">
                     <section className="h-fit w-full rounded-xl border border-(--menu-color) p-6">
                         <p className="font-bold tracking-wider text-(--menu-color) uppercase">
                             Consulta Cadastro Ambiental Rural
@@ -315,7 +316,10 @@ const Search = () => {
                                             {car.property.centroid.longitude}
                                         </p>
                                     </section>
-                                    <section className="flex w-1/2 cursor-pointer flex-col border-slate-950 bg-[#7fc588] p-2 hover:border-2 hover:bg-slate-200">
+                                    <section
+                                        className="flex w-1/2 cursor-pointer flex-col border-slate-950 bg-[#7fc588] p-2 hover:border-2 hover:bg-slate-200"
+                                        onClick={() => window.print()}
+                                    >
                                         <h1 className="flex font-semibold">
                                             <span>
                                                 <FileDown />
@@ -362,6 +366,7 @@ const Search = () => {
                         )}
                     </section>
                 </section>
+                {car && <AnalysisReport car={car} />}
             </section>
         </section>
     )

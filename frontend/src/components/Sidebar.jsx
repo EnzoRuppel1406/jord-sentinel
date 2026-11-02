@@ -9,7 +9,7 @@ const Sidebar = () => {
     const { user } = useContext(AuthContext)
     const location = useLocation()
     return (
-        <aside className="group fixed top-0 left-0 z-50 flex h-full w-16 flex-col items-center overflow-hidden bg-(--menu-color) text-(--main-bg) shadow-lg transition-all duration-300 ease-in-out hover:w-72">
+        <aside className="group fixed top-0 left-0 z-50 flex h-full w-16 flex-col items-center overflow-hidden bg-(--menu-color) text-(--main-bg) shadow-lg transition-all duration-300 ease-in-out hover:w-72 print:hidden">
             <nav className="w-full flex-1 content-center py-4 text-2xl">
                 <ul className="flex w-full flex-col gap-10">
                     <SidebarItem
