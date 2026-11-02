@@ -29,8 +29,8 @@ export class EvaluatePropertyRiskUseCase {
         if (overlappingRestrictions.length > 0) {
             for (const finding of overlappingRestrictions) {
                 switch (finding.source) {
-                    case 'Ibama':
-                        if (finding.sit_desmate === 'D') {
+                    case 'ibama':
+                        if (finding.sit_desmat === 'D') {
                             score = score + 90
                             assessments.push({
                                 restrictionType: 'ibama',
@@ -66,7 +66,7 @@ export class EvaluatePropertyRiskUseCase {
                         }
 
                         break
-                    case 'CNUC':
+                    case 'cnuc':
                         if (finding.pl_manejo === 'Sim') {
                             score = score + 40
                             assessments.push({
@@ -91,7 +91,7 @@ export class EvaluatePropertyRiskUseCase {
                             })
                         }
                         break
-                    case 'FUNAI':
+                    case 'funai':
                         if (
                             finding.fase_ti === 'Regularizada' ||
                             finding.fase_ti === 'Homologada'
@@ -119,7 +119,7 @@ export class EvaluatePropertyRiskUseCase {
                             })
                         }
                         break
-                    case 'CNFP':
+                    case 'cnfp':
                         if (finding.tipo !== 'TIPO B') {
                             score = score + 0
                             assessments.push({
@@ -155,7 +155,7 @@ export class EvaluatePropertyRiskUseCase {
                             })
                         }
                         break
-                    case 'PRODES':
+                    case 'prodes':
                         score = score + 0
                         assessments.push({
                             restrictionType: 'prodes',
@@ -168,6 +168,18 @@ export class EvaluatePropertyRiskUseCase {
                             overlapArea: finding.overlap_area,
                         })
                         break
+
+                    case 'quilombo':
+                        score = score + 80
+                        assessments.push({
+                            restrictionType: 'quilombo',
+                            score: 80,
+                            level: 'high',
+                            description:
+                                'Sobreposição com território quilombola titulado ou com título parcial.',
+                            legalReference: 'MCR-2-9-8',
+                            overlapArea: finding.overlap_area,
+                        })
                 }
             }
         }

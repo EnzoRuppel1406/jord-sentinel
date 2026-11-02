@@ -220,6 +220,38 @@ export class PostgresGeospatialRepository {
             [carCode, range]
         )
 
+        const diagnostic = await PostgresClient.query(
+            `
+    WITH property AS (
+        SELECT geom
+        FROM geospatial.car
+        WHERE cod_imovel = $1
+    )
+    SELECT
+        (SELECT COUNT(*) FROM property) AS car_found,
+        (SELECT COUNT(*) FROM geospatial.funai) AS funai_records,
+        (
+    SELECT COUNT(*)
+    FROM geospatial.funai f
+    CROSS JOIN property p
+    WHERE ST_DWithin(
+        f.geom::geography,
+        p.geom::geography,
+        10 * 1000
+    )
+) AS funai_within_10km,
+        (
+            SELECT COUNT(*)
+            FROM geospatial.funai f
+            CROSS JOIN property p
+            WHERE ST_Intersects(f.geom, p.geom)
+        ) AS funai_intersections
+    `,
+            [carCode]
+        )
+
+        console.log('FUNAI diagnostic:', diagnostic)
+
         return findings
     }
 

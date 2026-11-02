@@ -5,6 +5,7 @@ const AnalysisReport = ({ car }) => {
         funai: 'Terra Indígena',
         cnfp: 'Floresta Pública',
         prodes: 'PRODES',
+        quilombo: 'Quilombos',
     }
 
     const statusLabels = {
