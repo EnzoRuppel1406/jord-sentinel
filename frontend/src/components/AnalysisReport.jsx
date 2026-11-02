@@ -1,3 +1,5 @@
+import jordLogo from '../assets/jord_sentinel_logo.svg'
+
 const AnalysisReport = ({ car }) => {
     const restrictionLabels = {
         ibama: 'Embargo Ibama',
@@ -5,6 +7,7 @@ const AnalysisReport = ({ car }) => {
         funai: 'Terra Indígena',
         cnfp: 'Floresta Pública',
         prodes: 'PRODES',
+        quilombo: 'Quilombos',
     }
 
     const statusLabels = {
@@ -74,21 +77,33 @@ const AnalysisReport = ({ car }) => {
     const riskStyle = riskStyles[risk?.riskLevel] ?? 'border-slate-500 bg-slate-50 text-slate-900'
 
     return (
-        <article className="mx-auto hidden w-full max-w-[210mm] bg-white p-10 font-sans text-slate-800 print:mx-auto print:block print:max-w-none print:p-0 print:text-[11px]">
+        <article className="mx-auto hidden w-full max-w-[210mm] bg-white p-10 font-sans text-slate-800 print:mx-0 print:block print:w-full print:max-w-none print:p-0 print:text-[11px]">
             <header className="flex items-start justify-between border-b-4 border-emerald-950 pb-5">
-                <div>
-                    <p className="text-xs font-bold tracking-[0.2em] text-emerald-900 uppercase">
-                        Jörð Sentinel · Análise territorial
-                    </p>
-                    <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-950">
-                        Laudo socioambiental
-                    </h1>
-                    <p className="mt-1 text-sm text-slate-500">
-                        Análise indicativa de imóvel rural
-                    </p>
+                <div className="flex items-center justify-start gap-4">
+                    <div className="flex h-full w-40 shrink-0 items-center justify-center rounded-2xl bg-(--menu-color) p-2">
+                        <img
+                            src={jordLogo}
+                            alt="Jörð Sentinel"
+                            className="h-full w-full rounded-2xl object-contain"
+                        />
+                    </div>
+
+                    <div>
+                        <p className="text-xs font-bold tracking-[0.2em] text-emerald-900 uppercase">
+                            Jörð Sentinel · Análise territorial
+                        </p>
+
+                        <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-950">
+                            Laudo socioambiental
+                        </h1>
+
+                        <p className="mt-1 text-sm text-slate-500">
+                            Análise indicativa de imóvel rural
+                        </p>
+                    </div>
                 </div>
 
-                <div className="text-right text-sm text-slate-500">
+                <div className="mt-5 mr-2 rounded-lg border border-(--menu-color) p-2 text-left text-sm text-slate-500">
                     <p>Emitido em</p>
                     <p className="mt-1 font-semibold text-slate-800">
                         {new Date().toLocaleString('pt-BR')}
@@ -118,51 +133,51 @@ const AnalysisReport = ({ car }) => {
             </section>
 
             <section className="mt-8">
-                <h2 className="border-b border-slate-300 pb-2 text-sm font-bold tracking-widest text-emerald-950 uppercase">
+                <h2 className="border-b border-emerald-950 pb-2 text-sm font-bold tracking-widest text-emerald-950 uppercase">
                     Identificação do imóvel
                 </h2>
 
                 <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Código CAR</p>
                         <p className="mt-1 font-semibold break-all">{property.code}</p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Situação cadastral</p>
                         <p className="mt-1 font-semibold">
                             {statusLabels[property.status] ?? property.status ?? 'Sem informação'}
                         </p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Área declarada</p>
                         <p className="mt-1 font-semibold">{formatArea(property.area)}</p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Município / UF</p>
                         <p className="mt-1 font-semibold">
                             {property.city || 'Sem informação'} / {property.state || '—'}
                         </p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Módulos fiscais</p>
                         <p className="mt-1 font-semibold">{formatNumber(property.fiscalModules)}</p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Cadastro criado</p>
                         <p className="mt-1 font-semibold">{formatDate(property.createdAt)}</p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Última retificação</p>
                         <p className="mt-1 font-semibold">{formatDate(property.rectifiedAt)}</p>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 p-3">
+                    <div className="rounded-lg border border-(--menu-color) p-3">
                         <p className="text-xs text-slate-500 uppercase">Centroide</p>
                         <p className="mt-1 font-semibold">
                             {property.centroid
@@ -174,7 +189,7 @@ const AnalysisReport = ({ car }) => {
             </section>
 
             {carStatusAssessment && (
-                <section className="mt-8 rounded-lg border border-slate-200 p-4 print:break-inside-avoid">
+                <section className="mt-8 rounded-lg border border-(--menu-color) p-4 print:break-inside-avoid">
                     <h2 className="text-sm font-bold tracking-widest text-emerald-950 uppercase">
                         Situação cadastral considerada
                     </h2>
@@ -186,7 +201,7 @@ const AnalysisReport = ({ car }) => {
             )}
 
             <section className="mt-8">
-                <div className="flex items-end justify-between border-b border-slate-300 pb-2">
+                <div className="flex items-end justify-between border-b border-emerald-950 pb-2">
                     <h2 className="text-sm font-bold tracking-widest text-emerald-950 uppercase">
                         Restrições sobrepostas
                     </h2>
@@ -200,7 +215,7 @@ const AnalysisReport = ({ car }) => {
                     <div className="mt-4 space-y-3">
                         {restrictionAssessments.map((item, index) => (
                             <article
-                                className="rounded-lg border border-slate-200 p-4 print:break-inside-avoid"
+                                className="rounded-lg border border-(--menu-color) p-4 print:break-inside-avoid"
                                 key={`${item.restrictionType}-${index}`}
                             >
                                 <div className="flex items-start justify-between gap-4">
@@ -223,7 +238,7 @@ const AnalysisReport = ({ car }) => {
                                     </span>
                                 </div>
 
-                                <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-3">
+                                <div className="mt-4 grid grid-cols-2 gap-3 border-t border-(--menu-color) pt-3">
                                     <div>
                                         <p className="text-xs text-slate-500 uppercase">
                                             Área sobreposta
@@ -266,7 +281,7 @@ const AnalysisReport = ({ car }) => {
                         ))}
                     </div>
                 ) : (
-                    <p className="mt-4 rounded-lg border border-slate-200 p-4 text-slate-600">
+                    <p className="mt-4 rounded-lg border border-(--menu-color) p-4 text-slate-600">
                         Nenhuma sobreposição foi identificada nas bases consultadas para este
                         imóvel.
                         {carStatusAssessment &&
@@ -276,14 +291,14 @@ const AnalysisReport = ({ car }) => {
             </section>
 
             <section className="mt-8 print:break-inside-avoid">
-                <h2 className="border-b border-slate-300 pb-2 text-sm font-bold tracking-widest text-emerald-950 uppercase">
+                <h2 className="border-b border-emerald-950 pb-2 text-sm font-bold tracking-widest text-emerald-950 uppercase">
                     Bases consultadas
                 </h2>
 
                 <div className="mt-3 flex flex-wrap gap-2">
                     {Object.values(restrictionLabels).map((source) => (
                         <span
-                            className="rounded-full border border-slate-300 px-3 py-1 text-xs font-medium"
+                            className="rounded-full border border-emerald-950 px-3 py-1 text-xs font-medium"
                             key={source}
                         >
                             {source}
@@ -308,7 +323,7 @@ const AnalysisReport = ({ car }) => {
                 </p>
             </section>
 
-            <footer className="mt-10 border-t border-slate-300 pt-3 text-xs text-slate-500">
+            <footer className="mt-10 border-t border-emerald-950 pt-3 text-xs text-slate-500">
                 <p>
                     Documento gerado pelo Jörð Sentinel a partir das informações retornadas pela
                     consulta do CAR.

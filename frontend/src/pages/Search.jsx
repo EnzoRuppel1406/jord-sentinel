@@ -110,6 +110,7 @@ const Search = () => {
         funai: 'Terra Indígena',
         cnfp: 'Floresta Pública',
         prodes: 'PRODES',
+        quilombo: 'Quilombo',
     }
 
     const translations = {
@@ -155,7 +156,7 @@ const Search = () => {
     return (
         <section className="flex min-h-screen w-full justify-center overflow-y-auto bg-(--main-bg) font-sans">
             <Sidebar />
-            <section className="min-h-screen w-full p-12 pl-24">
+            <section className="min-h-screen w-full p-12 pl-24 print:min-h-0 print:p-0">
                 {requestMessage && (
                     <div
                         role={requestMessage.type === 'error' ? 'alert' : 'status'}
@@ -230,8 +231,21 @@ const Search = () => {
                             <section className="flex h-full w-full justify-between gap-3 rounded-xl border">
                                 <section className="flex h-full w-1/2 flex-col gap-4 p-2">
                                     <h1 className="flex w-full justify-between p-3">
-                                        Imovel Rural
-                                        <span className="rounded-1 bg-lime-100 p-1 font-medium text-green-950 uppercase">
+                                        <span className="rounded-1 border border-gray-700 bg-gray-300/50 p-1 font-medium text-gray-700">
+                                            Imovel Rural
+                                        </span>
+                                        <span
+                                            className={` ${
+                                                car.property.status === 'AT'
+                                                    ? 'border border-green-700 bg-green-300/50 text-green-700 '
+                                                    : car.property.status === 'PE'
+                                                      ? 'border border-amber-700 bg-amber-300/50 text-amber-700'
+                                                      : car.property.status === 'CA' ||
+                                                          car.property.status === 'SU'
+                                                        ? 'border border-red-700 bg-red-300/50 text-red-700'
+                                                        : 'border border-gray-700 bg-gray-300/50 text-gray-700'
+                                            } rounded-1 p-1 font-medium uppercase`}
+                                        >
                                             {car.property.status === 'AT'
                                                 ? 'Ativo'
                                                 : car.property.status === 'PE'
