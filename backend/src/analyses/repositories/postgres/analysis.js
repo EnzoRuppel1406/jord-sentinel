@@ -99,4 +99,45 @@ export class PostgresAnalysisRepository {
 
         return analysesList
     }
+
+    async summarizeByCompanyId(companyId) {
+        const [totals] = await PostgresClient.query(
+            `SELECT 
+                (SELECT COUNT(*)
+                FROM analyses
+                WHERE company_id = $1) AS total_analyses,
+
+                (SELECT COUNT(DISTINCT car_code)
+                FROM analyses
+                WHERE company_id = $1) AS total_properties,
+                
+                (SELECT COUNT(*)
+                FROM analyses_findings f
+                JOIN analyses a ON a.id = f.analysis_id
+                WHERE a.company_id = $1) AS total_findings`,
+            [companyId]
+        )
+
+        const totalFindingsByRestrictionType = await PostgresClient.query(
+            `
+            SELECT f.restriction_type, COUNT(*) AS total
+            FROM analyses_findings f
+            JOIN analyses a ON a.id = f.analysis_id
+            WHERE a.company_id = $1
+            GROUP BY f.restriction_type`,
+            [companyId]
+        )
+
+        const summary = {
+            totalAnalyses: Number(totals.total_analyses),
+            totalProperties: Number(totals.total_properties),
+            totalFindings: Number(totals.total_findings),
+            findingsByRestriction: totalFindingsByRestrictionType.map((item) => ({
+                restrictionType: item.restriction_type,
+                total: Number(item.total),
+            })),
+        }
+
+        return summary
+    }
 }

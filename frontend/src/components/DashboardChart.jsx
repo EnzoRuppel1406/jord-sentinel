@@ -1,42 +1,61 @@
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from 'recharts'
 
-const DashboardChart = () => {
-    const restrictions = [
-        { name: 'UC', overlays: 120 },
-        { name: 'Ibama', overlays: 230 },
-        { name: 'PRODES', overlays: 300 },
-        { name: 'Floresta Publica', overlays: 90 },
-        { name: 'Indigena', overlays: 278 },
-        { name: 'Quilombola', overlays: 10 },
+const DashboardChart = ({ findings }) => {
+    const categories = [
+        { name: 'UC', restrictionType: 'cnuc' },
+        { name: 'Ibama', restrictionType: 'ibama' },
+        { name: 'PRODES', restrictionType: 'prodes' },
+        { name: 'Floresta Pública', restrictionType: 'cnfp' },
+        { name: 'Indígena', restrictionType: 'funai' },
+        { name: 'Quilombola', restrictionType: 'quilombo' },
     ]
+
+    const restrictions = categories.map(({ name, restrictionType }) => {
+        const finding = findings.find((item) => item.restrictionType === restrictionType)
+
+        return {
+            name,
+            total: finding?.total ?? 0,
+        }
+    })
+
+    const BAR_COLORS = {
+        UC: '#0000ff',
+        Ibama: '#ff0000',
+        PRODES: '#fff',
+        'Floresta Pública': '#00aa00',
+        Indígena: '#8f33ff',
+        Quilombola: '#ff9911',
+    }
 
     return (
         <ResponsiveContainer width="100%" height="100%">
-            <BarChart responsive data={restrictions} layout="vertical">
+            <BarChart responsive data={restrictions} layout="vertical" className="dashboard-chart">
                 <YAxis dataKey="name" type="category" width={'auto'} />
-                <XAxis type="number" />
-                <Tooltip />
-                <Bar type="monotone"  dataKey="overlays" fill="#fff" radius={[0, 10, 10, 0]}>
-                    {restrictions.map((findEntryInArray, index) => {
-                        let barColor = '#000'
-                        if (findEntryInArray.name === 'UC') {
-                            barColor = '#0000ff'
-                        }
-                        if (findEntryInArray.name === 'Ibama') {
-                            barColor = '#ff0000'
-                        }
-                        if (findEntryInArray.name === 'PRODES') {
-                            barColor = '#fff'
-                        }
-                        if (findEntryInArray.name === 'Floresta Publica') {
-                            barColor = '#00aa00'
-                        }
-                        if (findEntryInArray.name === 'Indigena') {
-                            barColor = '#8f33ff'
-                        }
-                        if (findEntryInArray.name === 'Quilombola') {
-                            barColor = '#ff9911'
-                        }
+                <XAxis dataKey="total" type="number" />
+                <Tooltip
+                    content={({ active, payload, label }) => {
+                        if (!active || !payload?.length) return null
+
+                        return (
+                            <div className="rounded border-2 bg-stone-300 p-3 text-lg font-medium text-(--menu-color) shadow">
+                                <p>
+                                    <span className="text-xl font-semibold text-black">Tipo:</span>{' '}
+                                    {label}
+                                </p>
+                                <p>
+                                    <span className="text-xl font-semibold text-black">
+                                        Restrições identificadas:
+                                    </span>{' '}
+                                    {payload[0].value}
+                                </p>
+                            </div>
+                        )
+                    }}
+                />
+                <Bar type="monotone" dataKey="total" fill="#fff" radius={[0, 10, 10, 0]}>
+                    {restrictions.map((entry, index) => {
+                        const barColor = BAR_COLORS[entry.name] || '#000'
 
                         return <Cell key={`cell-${index}`} fill={barColor} />
                     })}

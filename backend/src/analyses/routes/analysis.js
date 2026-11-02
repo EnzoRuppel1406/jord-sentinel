@@ -3,6 +3,7 @@ import { authMiddleware } from '../../shared/middlewares/auth.js'
 import {
     CreateAnalysisController,
     ListAnalysesByCompanyIdController,
+    SummarizeAnalysesByCompanyIdController,
 } from '../controllers/index.js'
 
 export const router = express.Router()
@@ -19,6 +20,14 @@ router.get('/list', authMiddleware, async (req, res) => {
     const listAnalysesByCompanyIdController = new ListAnalysesByCompanyIdController()
 
     const { statusCode, body } = await listAnalysesByCompanyIdController.execute(req.user)
+
+    res.status(statusCode).send(body)
+})
+
+router.get('/summary', authMiddleware, async (req, res) => {
+    const summarizeAnalysesByCompanyIdController = new SummarizeAnalysesByCompanyIdController()
+
+    const { statusCode, body } = await summarizeAnalysesByCompanyIdController.execute(req.user)
 
     res.status(statusCode).send(body)
 })

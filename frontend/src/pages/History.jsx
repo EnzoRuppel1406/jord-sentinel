@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { api } from '../services/api'
 
 const History = () => {
-    const [analyses, setanalyses] = useState([])
+    const [analyses, setAnalyses] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [appliedSearchTerm, setAppliedSearchTerm] = useState('')
     const [statusFilter, setStatusFilter] = useState('')
@@ -18,7 +18,7 @@ const History = () => {
             try {
                 const { data } = await api.get('/analyses/list')
 
-                setanalyses(data)
+                setAnalyses(data)
                 setLoadError('')
             } catch (error) {
                 console.log(`Erro ao buscar dados ${error}`)

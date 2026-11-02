@@ -9,3 +9,7 @@
     height: 100%;
     z-index: 49;
 }
+
+.dashboard-chart :focus:not(:focus-visible) {
+    outline: none;
+}
