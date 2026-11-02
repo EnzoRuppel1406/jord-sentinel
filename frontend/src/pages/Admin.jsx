@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import { api } from '../services/api'
 import { AuthContext } from '../contexts/AuthContext'
-import { CircleCheck, UserRoundPlusIcon, X } from 'lucide-react'
+import { CircleCheck, MonitorX, UserRoundPlusIcon, X } from 'lucide-react'
 import AdminUsersListItem from '../components/AdminUsersListItem'
 
 import CreateUserForm from '../components/CreateUserForm'
@@ -16,6 +16,8 @@ const Admin = () => {
     const [showUserInfo, setShowUserInfo] = useState(false)
     const [userInfo, setUserInfo] = useState({})
     const [successMessage, setSuccessMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
+    const [loadError, setLoadError] = useState(false)
 
     const loadUsersList = useCallback(async () => {
         try {
@@ -23,6 +25,8 @@ const Admin = () => {
             setUsersList(data)
         } catch (error) {
             console.log(`Erro ao buscar usuários: ${error}`)
+            setErrorMessage(error?.response?.data?.message ?? 'Erro ao buscar usuários.')
+            setLoadError(true)
         }
     }, [])
 
@@ -113,11 +117,34 @@ const Admin = () => {
                             </button>
                         </div>
                     )}
+                    {errorMessage && (
+                        <div
+                            className={
+                                'fixed top-6 right-6 z-70 flex w-full max-w-sm items-start gap-3 rounded-xl border-2 border-red-300 bg-red-50 p-4 text-red-800 shadow-2xl'
+                            }
+                        >
+                            <MonitorX className="mt-0.5 shrink-0 text-red-700" size={24} />
+
+                            <div className="flex-1">
+                                <p className="font-bold">Ocorreu um erro.</p>
+                                <p className="text-sm">{errorMessage}</p>
+                            </div>
+
+                            <button
+                                type="button"
+                                aria-label="Fechar mensagem"
+                                className="cursor-pointer text-red-800 hover:opacity-60"
+                                onClick={() => setErrorMessage(null)}
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                    )}
                     <section className="flex h-25 w-3/4 items-center justify-between rounded-xl border-2 border-(--menu-color) p-8">
                         <h1>
                             Usuarios Cadastrados -
                             <span className="rounded bg-(--menu-color) p-2 font-bold text-(--main-bg)">
-                                {company.name}
+                                {company.name ?? 'Indisponível'}
                             </span>
                         </h1>
                         <button
@@ -130,8 +157,12 @@ const Admin = () => {
                         </button>
                     </section>
                     <section className="mt-10 h-full w-3/4 rounded-xl border-2 border-(--menu-color)">
-                        <section className="flex h-fit max-h-5/6 w-full items-start overflow-y-auto rounded-xl border bg-olive-300 text-center">
-                            {usersList.length ? (
+                        {loadError ? (
+                            <p className="flex h-full w-full items-center justify-center text-center text-2xl font-semibold">
+                                Não foi possível carregar os dados dos usuários
+                            </p>
+                        ) : usersList.length ? (
+                            <section className="flex h-fit max-h-5/6 w-full items-start overflow-y-auto rounded-xl border bg-olive-300 text-center">
                                 <table className="w-full table-fixed border-collapse border-spacing-x-4 border-spacing-y-2">
                                     <thead>
                                         <tr>
@@ -169,10 +200,12 @@ const Admin = () => {
                                         })}
                                     </tbody>
                                 </table>
-                            ) : (
-                                <p>Nenhum usuario cadastrado</p>
-                            )}
-                        </section>
+                            </section>
+                        ) : (
+                            <p className="flex h-full w-full items-center justify-center text-center font-semibold">
+                                Nenhum usuário cadastrado
+                            </p>
+                        )}
                     </section>
                 </section>
             </section>
