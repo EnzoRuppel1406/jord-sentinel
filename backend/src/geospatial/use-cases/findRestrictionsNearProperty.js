@@ -6,12 +6,13 @@ export class FindRestrictionsNearPropertyUseCase {
 
         const range = 10
 
-        const [ibama, cnuc, funai, cnfp, prodes] = await Promise.all([
+        const [ibama, cnuc, funai, cnfp, prodes, quilombo] = await Promise.all([
             postgresGeospatialRepository.findIbamaNearProperty(carCode, range),
             postgresGeospatialRepository.findConservationUnitNearProperty(carCode, range),
             postgresGeospatialRepository.findIndigenousLandNearProperty(carCode, range),
             postgresGeospatialRepository.findPublicForestNearProperty(carCode, range),
             postgresGeospatialRepository.findProdesNearProperty(carCode, range),
+            postgresGeospatialRepository.findQuilomboNearProperty(carCode, range),
         ])
         const restrictions = {
             ibama,
@@ -19,6 +20,7 @@ export class FindRestrictionsNearPropertyUseCase {
             funai,
             cnfp,
             prodes,
+            quilombo,
         }
 
         return restrictions

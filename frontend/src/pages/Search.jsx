@@ -238,7 +238,9 @@ const Search = () => {
                                                   ? 'Pendente'
                                                   : car.property.status === 'CA'
                                                     ? 'Cancelado'
-                                                    : ''}
+                                                    : car.property.status === 'SU'
+                                                      ? 'Suspenso'
+                                                      : ''}
                                         </span>
                                     </h1>
                                     <section className="grid h-fit w-full grid-cols-3 gap-4 border bg-slate-200 text-center whitespace-nowrap">

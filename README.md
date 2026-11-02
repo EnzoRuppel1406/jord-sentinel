@@ -40,17 +40,34 @@ ACCESS_TOKEN_KEY=my_special_secret
 ```
 
 Execute o script para criar a imagem do PostgreSQL:
+
 ```bash
 npm run db:up
 ```
 
-## 4. Executar as migrations
+### Importar as bases geoespaciais
 
-Com o banco criado e configurado, execute:
+Baixe os dados e extraia os shapefiles nas pastas correspondentes dentro de `data/shapefiles`: `car`, `cnuc`, `funai`, `ibama`, `public_forest`, `quilombo` e `prodes`. O script não baixa os arquivos; ele valida as pastas e importa as 27 UFs do CAR, as demais bases e os conjuntos PRODES para tabelas únicas. O PRODES recebe a coluna `biome` com o rótulo identificado pela pasta de origem. A base de Amazônia Legal é rotulada separadamente como `Amazonia Legal`.
+
+Com o Docker Desktop ativo e o `.env` configurado, execute:
+
+```bash
+npm run db:import-shapefiles
+```
+
+O comando inicia o serviço Postgres, importa os dados, cria os índices e atualiza as estatísticas. Em seguida, execute as migrations:
 
 ```bash
 npm run migrate
 ```
+
+Por segurança, se alguma tabela geoespacial já existir, a importação para sem apagá-la. Para substituir explicitamente as tabelas importadas, execute:
+
+```bash
+npm run db:update-shapefiles
+```
+
+`update-shapefiles` apaga os dados atuais das tabelas geoespaciais listadas antes de recarregá-las.
 
 As migrations criam as tabelas necessárias para o funcionamento da aplicação.
 
@@ -72,58 +89,58 @@ analyses
 
 Armazena as organizações cadastradas na plataforma.
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| id | UUID | Identificador da empresa |
-| name | VARCHAR(100) | Nome da empresa |
-| active | BOOLEAN | Status da empresa |
-| created_at | TIMESTAMPTZ | Data de criação |
-| updated_at | TIMESTAMPTZ | Data de atualização |
-| deleted_at | TIMESTAMPTZ | Data de exclusão lógica |
+| Campo      | Tipo         | Descrição                |
+| ---------- | ------------ | ------------------------ |
+| id         | UUID         | Identificador da empresa |
+| name       | VARCHAR(100) | Nome da empresa          |
+| active     | BOOLEAN      | Status da empresa        |
+| created_at | TIMESTAMPTZ  | Data de criação          |
+| updated_at | TIMESTAMPTZ  | Data de atualização      |
+| deleted_at | TIMESTAMPTZ  | Data de exclusão lógica  |
 
 ### `roles`
 
 Armazena as funções dos usuários.
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| id | UUID | Identificador da função |
-| name | VARCHAR(50) | Nome da função |
-| description | TEXT | Descrição da função |
-| active | BOOLEAN | Status da função |
-| created_at | TIMESTAMPTZ | Data de criação |
-| updated_at | TIMESTAMPTZ | Data de atualização |
-| deleted_at | TIMESTAMPTZ | Data de exclusão lógica |
+| Campo       | Tipo        | Descrição               |
+| ----------- | ----------- | ----------------------- |
+| id          | UUID        | Identificador da função |
+| name        | VARCHAR(50) | Nome da função          |
+| description | TEXT        | Descrição da função     |
+| active      | BOOLEAN     | Status da função        |
+| created_at  | TIMESTAMPTZ | Data de criação         |
+| updated_at  | TIMESTAMPTZ | Data de atualização     |
+| deleted_at  | TIMESTAMPTZ | Data de exclusão lógica |
 
 ### `users`
 
 Armazena os usuários da plataforma.
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| id | UUID | Identificador do usuário |
-| company_id | UUID | Empresa à qual o usuário pertence |
-| role_id | UUID | Função do usuário |
-| name | VARCHAR(100) | Nome do usuário |
-| email | VARCHAR(100) | E-mail |
-| password | VARCHAR(255) | Senha em hash |
-| active | BOOLEAN | Status do usuário |
-| created_at | TIMESTAMPTZ | Data de criação |
-| updated_at | TIMESTAMPTZ | Data de atualização |
-| deleted_at | TIMESTAMPTZ | Data de exclusão lógica |
+| Campo      | Tipo         | Descrição                         |
+| ---------- | ------------ | --------------------------------- |
+| id         | UUID         | Identificador do usuário          |
+| company_id | UUID         | Empresa à qual o usuário pertence |
+| role_id    | UUID         | Função do usuário                 |
+| name       | VARCHAR(100) | Nome do usuário                   |
+| email      | VARCHAR(100) | E-mail                            |
+| password   | VARCHAR(255) | Senha em hash                     |
+| active     | BOOLEAN      | Status do usuário                 |
+| created_at | TIMESTAMPTZ  | Data de criação                   |
+| updated_at | TIMESTAMPTZ  | Data de atualização               |
+| deleted_at | TIMESTAMPTZ  | Data de exclusão lógica           |
 
 ### `analyses`
 
 Armazena as análises realizadas.
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| id | UUID | Identificador da análise |
-| company_id | UUID | Empresa responsável |
-| user_id | UUID | Usuário responsável |
-| analysis_status | ENUM | Resultado da análise |
-| car_code | CHAR(43) | Código do CAR |
-| created_at | TIMESTAMPTZ | Data da análise |
+| Campo           | Tipo        | Descrição                |
+| --------------- | ----------- | ------------------------ |
+| id              | UUID        | Identificador da análise |
+| company_id      | UUID        | Empresa responsável      |
+| user_id         | UUID        | Usuário responsável      |
+| analysis_status | ENUM        | Resultado da análise     |
+| car_code        | CHAR(43)    | Código do CAR            |
+| created_at      | TIMESTAMPTZ | Data da análise          |
 
 Valores possíveis para `analysis_status`:
 
@@ -137,14 +154,14 @@ restricted
 
 Armazena as restrições encontradas durante uma análise.
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| id | UUID | Identificador da ocorrência |
-| analysis_id | UUID | Análise relacionada |
-| restriction_type | VARCHAR(80) | Tipo da restrição |
-| overlay_area | NUMERIC(10,2) | Área de sobreposição |
-| details | JSONB | Informações adicionais |
-| created_at | TIMESTAMPTZ | Data de criação |
+| Campo            | Tipo          | Descrição                   |
+| ---------------- | ------------- | --------------------------- |
+| id               | UUID          | Identificador da ocorrência |
+| analysis_id      | UUID          | Análise relacionada         |
+| restriction_type | VARCHAR(80)   | Tipo da restrição           |
+| overlay_area     | NUMERIC(10,2) | Área de sobreposição        |
+| details          | JSONB         | Informações adicionais      |
+| created_at       | TIMESTAMPTZ   | Data de criação             |
 
 ## 5. Executar a seed
 
@@ -168,11 +185,11 @@ A seed cria dados iniciais para testes e demonstração.
 
 ### Usuários
 
-| Nome | E-mail | Função | Empresa |
-|---|---|---|---|
-| John Doe | johndoe@jordfinance.com | Admin | Jörð Finance |
-| Jane Doe | janedoe@jordfinance.com | Analista | Jörð Finance |
-| Carlos Silva | carlos@agrocredito.com | Analista | Agro Crédito |
+| Nome         | E-mail                  | Função   | Empresa      |
+| ------------ | ----------------------- | -------- | ------------ |
+| John Doe     | johndoe@jordfinance.com | Admin    | Jörð Finance |
+| Jane Doe     | janedoe@jordfinance.com | Analista | Jörð Finance |
+| Carlos Silva | carlos@agrocredito.com  | Analista | Agro Crédito |
 
 As senhas dos usuários de demonstração estão definidas diretamente no arquivo de seed.
 
@@ -216,6 +233,8 @@ npm install
 # Criar e configurar o arquivo .env
 
 npm run db:up
+
+npm run db:import-shapefiles
 
 npm run migrate
 npm run seed

@@ -42,7 +42,7 @@ export class PostgresGeospatialRepository {
                 )
 
                 SELECT 
-                    'Ibama' AS source,
+                    'ibama' AS source,
                     i.num_tad,
                     i.municipio,
                     i.uf, i.nome_embar,
@@ -89,7 +89,7 @@ export class PostgresGeospatialRepository {
                 )
 
                 SELECT
-                    'CNUC' AS source,
+                    'cnuc' AS source,
                     u.uc_id,
                     u.nome_uc,
                     u.cria_ano,
@@ -138,7 +138,7 @@ export class PostgresGeospatialRepository {
                 )
 
                 SELECT
-                    'FUNAI' as source,
+                    'funai' as source,
                     i.terrai_cod,
                     i.terrai_nom,
                     i.municipio_,
@@ -185,7 +185,7 @@ export class PostgresGeospatialRepository {
                 )
 
                 SELECT
-                    'CNFP' AS source,
+                    'cnfp' AS source,
                     f.codigo,
                     f.nome,
                     f.tipo,
@@ -233,7 +233,7 @@ export class PostgresGeospatialRepository {
                 )
 
                 SELECT
-                    'PRODES' as source,
+                    'prodes' as source,
                     p.uuid,
                     p.biome,
                     p.state,
@@ -263,6 +263,50 @@ export class PostgresGeospatialRepository {
                     $2 * 1000
                 ) AND p.year >= 2019
             `,
+            [carCode, range]
+        )
+
+        return findings
+    }
+
+    async findQuilomboNearProperty(carCode, range) {
+        const findings = await PostgresClient.query(
+            `
+            WITH property AS (
+                SELECT geom
+                FROM geospatial.car c
+                WHERE c.cod_imovel = $1
+            )
+            
+            SELECT
+                'quilombo' AS source,
+                q.name,
+                q.inserted_a,
+                q.updated_at,
+                ST_Intersects(q.geom, p.geom) AS overlaps_property,
+                ST_AsGeoJSON(ST_Transform(q.geom, 4326))::jsonb AS geometry,
+                CASE 
+                    WHEN ST_Intersects(q.geom, p.geom) THEN
+                        ROUND(
+                            (
+                                ST_Area(
+                                    ST_Transform(
+                                        ST_Intersection(q.geom, p.geom),
+                                        4326
+                                    )::geography
+                                ) / 10000
+                            )::numeric,
+                            2
+                        )
+                END AS overlap_area
+                FROM geospatial.quilombo q
+                CROSS JOIN property p
+                WHERE ST_DWithin(
+                    q.geom::geography,
+                    p.geom::geography,
+                    $2 * 1000
+                )
+        `,
             [carCode, range]
         )
 

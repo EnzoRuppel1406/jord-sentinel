@@ -15,6 +15,8 @@
         "seed": "node backend/src/database/postgres/seeds/seed.js",
         "start": "concurrently \"npm run back\" \"npm run front\"",
         "db:up": "docker compose up -d",
+        "db:import-shapefiles": "bash scripts/import-shapefiles.sh",
+        "db:update-shapefiles": "npm run db:import-shapefiles -- --replace",
         "db:down": "docker compose down",
         "db:start": "docker compose start",
         "db:stop": "docker compose stop"

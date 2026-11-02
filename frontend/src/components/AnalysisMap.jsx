@@ -54,7 +54,7 @@ const AnalisysMap = ({ lat, long, carGeometry, restrictions = [], searchTrigger 
         'Unidade de Conservação': '#13077D',
         'Embargo Ibama': '#9E0202',
         'Floresta Pública': '#59FA48',
-        Quilombo: '#380E00',
+        Quilombo: '#380e00',
         PRODES: '#ddd',
     }
 

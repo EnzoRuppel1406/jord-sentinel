@@ -25,7 +25,7 @@ const DashboardChart = ({ findings }) => {
         PRODES: '#fff',
         'Floresta Pública': '#00aa00',
         Indígena: '#8f33ff',
-        Quilombola: '#ff9911',
+        Quilombola: '#380e00',
     }
 
     return (
