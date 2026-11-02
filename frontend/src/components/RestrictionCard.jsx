@@ -1,9 +1,4 @@
 const RestrictionCard = ({ type, area, source, description, score, riskLevel }) => {
-    const translations = {
-        high: 'Alto',
-        moderate: 'Moderado',
-        low: 'Baixo',
-    }
     return (
         <article className="flex h-fit w-full justify-between space-y-1 border-l-5 border-red-900 bg-slate-200 p-2 shadow-xl">
             <section className="flex w-1/2 flex-col justify-between text-left">
@@ -16,8 +11,8 @@ const RestrictionCard = ({ type, area, source, description, score, riskLevel }) 
                     {area?.toLocaleString('pt-BR') ?? 'Sem informação'}
                     {area != null && ' ha'}
                 </p>
-                <p>{score} pts</p>
-                <p>{translations[riskLevel]}</p>
+                <p>{score}</p>
+                <p>{riskLevel}</p>
             </section>
         </article>
     )
